@@ -880,7 +880,7 @@ tau_all_sc = np.concatenate((tau_4_1_sc, tau_4_2_sc, tau_4_3_sc))
 
 temp_all_cc = np.concatenate((temp_4_1_cc, temp_4_2_cc, temp_4_3_cc))
 tau_all_cc = np.concatenate((tau_4_1_cc, tau_4_2_cc, tau_4_3_cc))
-#%%
+#%
 fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
 
 # ax.plot(temp_all_sc,tau_all_sc,'o-',label='1 sc')
@@ -898,16 +898,17 @@ plt.grid()
 plt.ylabel(r'$\tau$ (s)')
 plt.xlabel('Temperatura (ºC)')
 plt.title(identif_4_sc +' - '+identif_4_cc)
-#plt.savefig('tau_vs_T_'+identif_4+'.png',dpi=300)
+plt.xlim(-10,10)
+plt.savefig('tau_vs_T_comparativa_'+identif_4_sc+' '+identif_4_cc + '_zoom.png',dpi=300)
 plt.show()
-#%%
+#%
 def lineal(x,a,b):
     return a*x+b
 
 lim_ajuste_i= -6
 lim_ajuste_tf = -4.0
 lim_ajuste_f= 0
-#%% SC
+#% SC
 x_1_i_sc=temp_4_1_sc[np.nonzero(temp_4_1_sc<=lim_ajuste_i)]
 x_1_tf_sc=temp_4_1_sc[np.nonzero((temp_4_1_sc>lim_ajuste_tf) & (temp_4_1_sc<lim_ajuste_f))]
 x_1_f_sc=temp_4_1_sc[np.nonzero(temp_4_1_sc>=lim_ajuste_f)]
@@ -960,7 +961,267 @@ y_sc_tf=lineal(x_sc_tf,slope_tf_sc,intercept_tf_sc)
 x_sc_f=np.linspace(lim_ajuste_f,25,1000)
 y_sc_f=lineal(x_sc_f,slope_f_sc,intercept_f_sc)
 
-#%% CC
+#% CC
+x_1_i_cc=temp_4_1_cc[np.nonzero(temp_4_1_cc<=lim_ajuste_i)]
+x_1_tf_cc=temp_4_1_cc[np.nonzero((temp_4_1_cc>lim_ajuste_tf) & (temp_4_1_cc<lim_ajuste_f))]
+x_1_f_cc=temp_4_1_cc[np.nonzero(temp_4_1_cc>=lim_ajuste_f)]
+
+y_1_i_cc=tau_4_1_cc[np.nonzero(temp_4_1_cc<=lim_ajuste_i)]
+y_1_tf_cc=tau_4_1_cc[np.nonzero((temp_4_1_cc>lim_ajuste_tf) & (temp_4_1_cc<lim_ajuste_f))]
+y_1_f_cc=tau_4_1_cc[np.nonzero(temp_4_1_cc>=lim_ajuste_f)]
+
+x_2_i_cc=temp_4_2_cc[np.nonzero(temp_4_2_cc<=lim_ajuste_i)]
+x_2_tf_cc=temp_4_2_cc[np.nonzero((temp_4_2_cc>lim_ajuste_tf) & (temp_4_2_cc<lim_ajuste_f))]
+x_2_f_cc=temp_4_2_cc[np.nonzero(temp_4_2_cc>=lim_ajuste_f)]
+
+y_2_i_cc=tau_4_2_cc[np.nonzero(temp_4_2_cc<=lim_ajuste_i)]
+y_2_tf_cc=tau_4_2_cc[np.nonzero((temp_4_2_cc>lim_ajuste_tf) & (temp_4_2_cc<lim_ajuste_f))]
+y_2_f_cc=tau_4_2_cc[np.nonzero(temp_4_2_cc>=lim_ajuste_f)]
+
+x_3_i_cc=temp_4_3_cc[np.nonzero(temp_4_3_cc<=lim_ajuste_i)]
+x_3_tf_cc=temp_4_3_cc[np.nonzero((temp_4_3_cc>lim_ajuste_tf) & (temp_4_3_cc<lim_ajuste_f))]
+x_3_f_cc=temp_4_3_cc[np.nonzero(temp_4_3_cc>=lim_ajuste_f)]
+
+y_3_i_cc=tau_4_3_cc[np.nonzero(temp_4_3_cc<=lim_ajuste_i)]
+y_3_tf_cc=tau_4_3_cc[np.nonzero((temp_4_3_cc>lim_ajuste_tf) & (temp_4_3_cc<lim_ajuste_f))]
+y_3_f_cc=tau_4_3_cc[np.nonzero(temp_4_3_cc>=lim_ajuste_f)]
+
+x_all_i_cc = np.concatenate((x_1_i_cc, x_2_i_cc, x_3_i_cc))
+y_all_i_cc = np.concatenate((y_1_i_cc, y_2_i_cc, y_3_i_cc))
+x_all_tf_cc = np.concatenate((x_1_tf_cc, x_2_tf_cc, x_3_tf_cc))
+y_all_tf_cc = np.concatenate((y_1_tf_cc, y_2_tf_cc, y_3_tf_cc))
+x_all_f_cc = np.concatenate((x_1_f_cc, x_2_f_cc, x_3_f_cc))
+y_all_f_cc = np.concatenate((y_1_f_cc, y_2_f_cc, y_3_f_cc))
+
+# Realizar el ajuste lineal
+slope_i_cc, intercept_i_cc, r_value_i_cc, p_value_i_cc, std_err_i_cc = linregress(x_all_i_cc, y_all_i_cc)
+slope_tf_cc, intercept_tf_cc, r_value_tf_cc, p_value_tf_cc, std_err_tf_cc = linregress(x_all_tf_cc, y_all_tf_cc)
+slope_f_cc, intercept_f_cc, r_value_f_cc, p_value_f_cc, std_err_f_cc = linregress(x_all_f_cc, y_all_f_cc)
+a_i_cc = ufloat(slope_i_cc,std_err_i_cc)
+a_tf_cc = ufloat(slope_tf_cc,std_err_tf_cc)
+a_f_cc = ufloat(slope_f_cc,std_err_f_cc)
+
+# Mostrar los resultados del ajuste lineal
+print('FF congelado CON campo')
+print(f'Pendiente_i: {a_i_cc}') 
+print(f'Pendiente_tf: {a_tf_cc}')
+print(f'Pendiente_f: {a_f_cc}')
+
+x_cc_i=np.linspace(-50,lim_ajuste_i,1000)
+y_cc_i=lineal(x_cc_i,slope_i_cc,intercept_i_cc)
+x_cc_tf=np.linspace(lim_ajuste_tf,lim_ajuste_f,1000)
+y_cc_tf=lineal(x_cc_tf,slope_tf_cc,intercept_tf_cc)
+x_cc_f=np.linspace(lim_ajuste_f,25,1000)
+y_cc_f=lineal(x_cc_f,slope_f_cc,intercept_f_cc)
+
+#%
+fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+ax.plot(x_all_i_sc, y_all_i_sc, 'o',label=f'i: [{min(x_all_i_sc)} ; {lim_ajuste_i}]°C')
+ax.plot(x_sc_i,y_sc_i,label=f'{a_i_sc:.1uf} ns/°C')
+ax.plot(x_all_tf_sc, y_all_tf_sc,'o', label=f'tf: [{lim_ajuste_i} ; {lim_ajuste_f}]°C')
+ax.plot(x_sc_tf,y_sc_tf,label=f'{a_tf_sc:.1uf} ns/°C')
+ax.plot(x_all_f_sc, y_all_f_sc, 'o',label=f'f: [{lim_ajuste_f} ; {max(x_all_f_sc)}]°C')
+ax.plot(x_sc_f,y_sc_f,label=f'{a_f_sc:.1uf} ns/°C')
+
+ax.plot(x_all_i_cc, y_all_i_cc, 'o',label=f'i: [{min(x_all_i_cc)} ; {lim_ajuste_i}]°C')
+ax.plot(x_cc_i,y_cc_i,label=f'{a_i_cc:.1uf} ns/°C')
+ax.plot(x_all_tf_cc, y_all_tf_cc,'o', label=f'tf: [{lim_ajuste_i} ; {lim_ajuste_f}]°C')
+ax.plot(x_cc_tf,y_cc_tf,label=f'{a_tf_cc:.1uf} ns/°C')
+ax.plot(x_all_f_cc, y_all_f_cc, 'o',label=f'f: [{lim_ajuste_f} ; {max(x_all_f_cc)}]°C')
+ax.plot(x_cc_f,y_cc_f,label=f'{a_f_cc:.1uf} ns/°C')
+
+plt.legend(ncol=2)
+plt.grid()
+plt.ylabel(r'$\tau$ (s)')
+plt.xlabel('Temperatura (°C)')
+plt.title(identif_4_sc + identif_4_sc)
+plt.savefig('tau_vs_T_ajustes.png',dpi=300)
+plt.show()
+
+x_1_i_cc=temp_4_1_cc[np.nonzero(temp_4_1_cc<=lim_ajuste_i)]
+x_1_tf_cc=temp_4_1_cc[np.nonzero((temp_4_1_cc>lim_ajuste_tf) & (temp_4_1_cc<lim_ajuste_f))]
+x_1_f_cc=temp_4_1_cc[np.nonzero(temp_4_1_cc>=lim_ajuste_f)]
+
+y_1_i_cc=tau_4_1_cc[np.nonzero(temp_4_1_cc<=lim_ajuste_i)]
+y_1_tf_cc=tau_4_1_cc[np.nonzero((temp_4_1_cc>lim_ajuste_tf) & (temp_4_1_cc<lim_ajuste_f))]
+y_1_f_cc=tau_4_1_cc[np.nonzero(temp_4_1_cc>=lim_ajuste_f)]
+
+x_2_i_cc=temp_4_2_cc[np.nonzero(temp_4_2_cc<=lim_ajuste_i)]
+x_2_tf_cc=temp_4_2_cc[np.nonzero((temp_4_2_cc>lim_ajuste_tf) & (temp_4_2_cc<lim_ajuste_f))]
+x_2_f_cc=temp_4_2_cc[np.nonzero(temp_4_2_cc>=lim_ajuste_f)]
+
+y_2_i_cc=tau_4_2_cc[np.nonzero(temp_4_2_cc<=lim_ajuste_i)]
+y_2_tf_cc=tau_4_2_cc[np.nonzero((temp_4_2_cc>lim_ajuste_tf) & (temp_4_2_cc<lim_ajuste_f))]
+y_2_f_cc=tau_4_2_cc[np.nonzero(temp_4_2_cc>=lim_ajuste_f)]
+
+x_3_i_cc=temp_4_3_cc[np.nonzero(temp_4_3_cc<=lim_ajuste_i)]
+x_3_tf_cc=temp_4_3_cc[np.nonzero((temp_4_3_cc>lim_ajuste_tf) & (temp_4_3_cc<lim_ajuste_f))]
+x_3_f_cc=temp_4_3_cc[np.nonzero(temp_4_3_cc>=lim_ajuste_f)]
+
+y_3_i_cc=tau_4_3_cc[np.nonzero(temp_4_3_cc<=lim_ajuste_i)]
+y_3_tf_cc=tau_4_3_cc[np.nonzero((temp_4_3_cc>lim_ajuste_tf) & (temp_4_3_cc<lim_ajuste_f))]
+y_3_f_cc=tau_4_3_cc[np.nonzero(temp_4_3_cc>=lim_ajuste_f)]
+
+x_all_i_cc = np.concatenate((x_1_i_cc, x_2_i_cc, x_3_i_cc))
+y_all_i_cc = np.concatenate((y_1_i_cc, y_2_i_cc, y_3_i_cc))
+x_all_tf_cc = np.concatenate((x_1_tf_cc, x_2_tf_cc, x_3_tf_cc))
+y_all_tf_cc = np.concatenate((y_1_tf_cc, y_2_tf_cc, y_3_tf_cc))
+x_all_f_cc = np.concatenate((x_1_f_cc, x_2_f_cc, x_3_f_cc))
+y_all_f_cc = np.concatenate((y_1_f_cc, y_2_f_cc, y_3_f_cc))
+
+# Realizar el ajuste lineal
+slope_i_cc, intercept_i_cc, r_value_i_cc, p_value_i_cc, std_err_i_cc = linregress(x_all_i_cc, y_all_i_cc)
+slope_tf_cc, intercept_tf_cc, r_value_tf_cc, p_value_tf_cc, std_err_tf_cc = linregress(x_all_tf_cc, y_all_tf_cc)
+slope_f_cc, intercept_f_cc, r_value_f_cc, p_value_f_cc, std_err_f_cc = linregress(x_all_f_cc, y_all_f_cc)
+a_i_cc = ufloat(slope_i_cc,std_err_i_cc)
+a_tf_cc = ufloat(slope_tf_cc,std_err_tf_cc)
+a_f_cc = ufloat(slope_f_cc,std_err_f_cc)
+
+# Mostrar los resultados del ajuste lineal
+print(f'Pendiente_i: {a_i_cc}') 
+print(f'Pendiente_tf: {a_tf_cc}')
+print(f'Pendiente_f: {a_f_cc}')
+# print(f"Intersección_i: {intercept_i} - Intersección_f: {intercept_f}")
+
+x_aux_i=np.linspace(-50,lim_ajuste_i,1000)
+y_aux_i=lineal(x_aux_i,slope_i_cc,intercept_i_cc)
+x_aux_tf=np.linspace(lim_ajuste_tf,lim_ajuste_f,1000)
+y_aux_tf=lineal(x_aux_tf,slope_tf_cc,intercept_tf_cc)
+x_aux_f=np.linspace(lim_ajuste_f,25,1000)
+y_aux_f=lineal(x_aux_f,slope_f_cc,intercept_f_cc)
+
+fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+ax.plot(x_all_i_cc, y_all_i_cc, '.',label=f'i: [{min(x_all_i_cc)} ; {lim_ajuste_i}]°C')
+ax.plot(x_aux_i,y_aux_i,label=f'{a_i_cc:.1uf} ns/°C')
+ax.plot(x_all_tf_cc, y_all_tf_cc,'.', label=f'tf: [{lim_ajuste_i} ; {lim_ajuste_f}]°C')
+ax.plot(x_aux_tf,y_aux_tf,label=f'{a_tf_cc:.1uf} ns/°C')
+ax.plot(x_all_f_cc, y_all_f_cc, '.',label=f'f: [{lim_ajuste_f} ; {max(x_all_f_cc)}]°C')
+ax.plot(x_aux_f,y_aux_f,label=f'{a_f_cc:.1uf} ns/°C')
+
+plt.legend(ncol=3)
+plt.grid()
+plt.ylabel(r'$\tau$ (s)')
+plt.xlabel('Indx')
+plt.title(identif_4_cc)
+#plt.savefig('tau_vs_T_'+identif_4+'.png',dpi=300)
+plt.show()
+
+#%%%
+
+#%% 265 kHz 57 kA/m   CC vs SC
+identif_4_sc='265_20_CsC'
+dir_4_sc = os.path.join(os.getcwd(),identif_4_sc)
+archivos_resultados = [f for f in os.listdir(dir_4_sc) if  fnmatch.fnmatch(f, '*resultados*')]
+archivos_resultados.sort()
+filepaths_sc = [os.path.join(dir_4_sc,f) for f in archivos_resultados]
+
+_,files_4_1_sc,time_4_1_sc,temp_4_1_sc,_,_,_,_,_,_,_,_,SAR_4_1_sc,tau_4_1_sc,_ = lector_resultados(filepaths_sc[0])
+_,files_4_2_sc,time_4_2_sc,temp_4_2_sc,_,_,_,_,_,_,_,_,SAR_4_2_sc,tau_4_2_sc,_ = lector_resultados(filepaths_sc[1])
+_,files_4_3_sc,time_4_3_sc,temp_4_3_sc,_,_,_,_,_,_,_,_,SAR_4_3_sc,tau_4_3_sc,_ = lector_resultados(filepaths_sc[2])
+
+tau_4_1_sc=tau_4_1_sc*1e9
+tau_4_2_sc=tau_4_2_sc*1e9
+tau_4_3_sc=tau_4_3_sc*1e9
+
+identif_4_cc='265_20_CcC'
+dir_4_cc = os.path.join(os.getcwd(),identif_4_cc)
+archivos_resultados = [f for f in os.listdir(dir_4_cc) if  fnmatch.fnmatch(f, '*resultados*')]
+archivos_resultados.sort()
+filepaths_cc = [os.path.join(dir_4_cc,f) for f in archivos_resultados]
+
+_,files_4_1_cc,time_4_1_cc,temp_4_1_cc,_,_,_,_,_,_,_,_,SAR_4_1_cc,tau_4_1_cc,_ = lector_resultados(filepaths_cc[0])
+_,files_4_2_cc,time_4_2_cc,temp_4_2_cc,_,_,_,_,_,_,_,_,SAR_4_2_cc,tau_4_2_cc,_ = lector_resultados(filepaths_cc[1])
+_,files_4_3_cc,time_4_3_cc,temp_4_3_cc,_,_,_,_,_,_,_,_,SAR_4_3_cc,tau_4_3_cc,_ = lector_resultados(filepaths_cc[2])
+
+tau_4_1_cc=tau_4_1_cc*1e9
+tau_4_2_cc=tau_4_2_cc*1e9
+tau_4_3_cc=tau_4_3_cc*1e9
+
+temp_all_sc = np.concatenate((temp_4_1_sc, temp_4_2_sc, temp_4_3_sc))
+tau_all_sc = np.concatenate((tau_4_1_sc, tau_4_2_sc, tau_4_3_sc))
+
+temp_all_cc = np.concatenate((temp_4_1_cc, temp_4_2_cc, temp_4_3_cc))
+tau_all_cc = np.concatenate((tau_4_1_cc, tau_4_2_cc, tau_4_3_cc))
+#%
+fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+
+# ax.plot(temp_all_sc,tau_all_sc,'o-',label='1 sc')
+# ax.plot(temp_all_cc,tau_all_cc,'o-',label='1 cc')
+ax.plot(temp_4_1_sc,tau_4_1_sc,'o-',c='tab:blue',label='1 sc')
+ax.plot(temp_4_2_sc,tau_4_2_sc,'o-',c='tab:blue',label='2 sc')
+ax.plot(temp_4_3_sc,tau_4_3_sc,'o-',c='tab:blue',label='3 sc')
+
+ax.plot(temp_4_1_cc,tau_4_1_cc,'s-',c='tab:orange',label='1 H$_{⟂}$')
+ax.plot(temp_4_2_cc,tau_4_2_cc,'s-',c='tab:orange',label='2 H$_{⟂}$')
+ax.plot(temp_4_3_cc,tau_4_3_cc,'s-',c='tab:orange',label='3 H$_{⟂}$')
+
+plt.legend(ncol=2)
+plt.grid()
+plt.ylabel(r'$\tau$ (s)')
+plt.xlabel('Temperatura (ºC)')
+plt.title(identif_4_sc +' - '+identif_4_cc)
+# plt.xlim(-10,10)
+plt.savefig('tau_vs_T_comparativa_'+identif_4_sc+' '+identif_4_cc + '.png',dpi=300)
+plt.show()
+
+#%%
+lim_ajuste_i= -6
+lim_ajuste_tf = -4.0
+lim_ajuste_f= 0
+#% SC
+x_1_i_sc=temp_4_1_sc[np.nonzero(temp_4_1_sc<=lim_ajuste_i)]
+x_1_tf_sc=temp_4_1_sc[np.nonzero((temp_4_1_sc>lim_ajuste_tf) & (temp_4_1_sc<lim_ajuste_f))]
+x_1_f_sc=temp_4_1_sc[np.nonzero(temp_4_1_sc>=lim_ajuste_f)]
+
+y_1_i_sc=tau_4_1_sc[np.nonzero(temp_4_1_sc<=lim_ajuste_i)]
+y_1_tf_sc=tau_4_1_sc[np.nonzero((temp_4_1_sc>lim_ajuste_tf) & (temp_4_1_sc<lim_ajuste_f))]
+y_1_f_sc=tau_4_1_sc[np.nonzero(temp_4_1_sc>=lim_ajuste_f)]
+
+x_2_i_sc=temp_4_2_sc[np.nonzero(temp_4_2_sc<=lim_ajuste_i)]
+x_2_tf_sc=temp_4_2_sc[np.nonzero((temp_4_2_sc>lim_ajuste_tf) & (temp_4_2_sc<lim_ajuste_f))]
+x_2_f_sc=temp_4_2_sc[np.nonzero(temp_4_2_sc>=lim_ajuste_f)]
+
+y_2_i_sc=tau_4_2_sc[np.nonzero(temp_4_2_sc<=lim_ajuste_i)]
+y_2_tf_sc=tau_4_2_sc[np.nonzero((temp_4_2_sc>lim_ajuste_tf) & (temp_4_2_sc<lim_ajuste_f))]
+y_2_f_sc=tau_4_2_sc[np.nonzero(temp_4_2_sc>=lim_ajuste_f)]
+
+x_3_i_sc=temp_4_3_sc[np.nonzero(temp_4_3_sc<=lim_ajuste_i)]
+x_3_tf_sc=temp_4_3_sc[np.nonzero((temp_4_3_sc>lim_ajuste_tf) & (temp_4_3_sc<lim_ajuste_f))]
+x_3_f_sc=temp_4_3_sc[np.nonzero(temp_4_3_sc>=lim_ajuste_f)]
+
+y_3_i_sc=tau_4_3_sc[np.nonzero(temp_4_3_sc<=lim_ajuste_i)]
+y_3_tf_sc=tau_4_3_sc[np.nonzero((temp_4_3_sc>lim_ajuste_tf) & (temp_4_3_sc<lim_ajuste_f))]
+y_3_f_sc=tau_4_3_sc[np.nonzero(temp_4_3_sc>=lim_ajuste_f)]
+
+x_all_i_sc = np.concatenate((x_1_i_sc, x_2_i_sc, x_3_i_sc))
+y_all_i_sc = np.concatenate((y_1_i_sc, y_2_i_sc, y_3_i_sc))
+x_all_tf_sc = np.concatenate((x_1_tf_sc, x_2_tf_sc, x_3_tf_sc))
+y_all_tf_sc = np.concatenate((y_1_tf_sc, y_2_tf_sc, y_3_tf_sc))
+x_all_f_sc = np.concatenate((x_1_f_sc, x_2_f_sc, x_3_f_sc))
+y_all_f_sc = np.concatenate((y_1_f_sc, y_2_f_sc, y_3_f_sc))
+
+# Realizar el ajuste lineal
+slope_i_sc, intercept_i_sc, r_value_i_sc, p_value_i_sc, std_err_i_sc = linregress(x_all_i_sc, y_all_i_sc)
+slope_tf_sc, intercept_tf_sc, r_value_tf_sc, p_value_tf_sc, std_err_tf_sc = linregress(x_all_tf_sc, y_all_tf_sc)
+slope_f_sc, intercept_f_sc, r_value_f_sc, p_value_f_sc, std_err_f_sc = linregress(x_all_f_sc, y_all_f_sc)
+a_i_sc = ufloat(slope_i_sc,std_err_i_sc)
+a_tf_sc = ufloat(slope_tf_sc,std_err_tf_sc)
+a_f_sc = ufloat(slope_f_sc,std_err_f_sc)
+
+# Mostrar los resultados del ajuste lineal
+print('FF congelado SIN campo')
+print(f'Pendiente_i: {a_i_sc}') 
+print(f'Pendiente_tf: {a_tf_sc}')
+print(f'Pendiente_f: {a_f_sc}')
+
+x_sc_i=np.linspace(-50,lim_ajuste_i,1000)
+y_sc_i=lineal(x_sc_i,slope_i_sc,intercept_i_sc)
+x_sc_tf=np.linspace(lim_ajuste_tf,lim_ajuste_f,1000)
+y_sc_tf=lineal(x_sc_tf,slope_tf_sc,intercept_tf_sc)
+x_sc_f=np.linspace(lim_ajuste_f,25,1000)
+y_sc_f=lineal(x_sc_f,slope_f_sc,intercept_f_sc)
+
+#% CC
 x_1_i_cc=temp_4_1_cc[np.nonzero(temp_4_1_cc<=lim_ajuste_i)]
 x_1_tf_cc=temp_4_1_cc[np.nonzero((temp_4_1_cc>lim_ajuste_tf) & (temp_4_1_cc<lim_ajuste_f))]
 x_1_f_cc=temp_4_1_cc[np.nonzero(temp_4_1_cc>=lim_ajuste_f)]
@@ -1014,7 +1275,7 @@ x_cc_f=np.linspace(lim_ajuste_f,25,1000)
 y_cc_f=lineal(x_cc_f,slope_f_cc,intercept_f_cc)
 
 #%%
-fig,ax= plt.subplots(figsize=(10,6),constrained_layout=True)
+fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
 ax.plot(x_all_i_sc, y_all_i_sc, 'o',label=f'i: [{min(x_all_i_sc)} ; {lim_ajuste_i}]°C')
 ax.plot(x_sc_i,y_sc_i,label=f'{a_i_sc:.1uf} ns/°C')
 ax.plot(x_all_tf_sc, y_all_tf_sc,'o', label=f'tf: [{lim_ajuste_i} ; {lim_ajuste_f}]°C')
@@ -1032,36 +1293,34 @@ ax.plot(x_cc_f,y_cc_f,label=f'{a_f_cc:.1uf} ns/°C')
 plt.legend(ncol=2)
 plt.grid()
 plt.ylabel(r'$\tau$ (s)')
-plt.xlabel('Indx')
-plt.title(identif_4_sc)
-#plt.savefig('tau_vs_T_'+identif_4+'.png',dpi=300)
+plt.xlabel('Temperatura (°C)')
+plt.title(identif_4_sc +' - ' + identif_4_sc)
+plt.savefig('tau_vs_T_ajustes_265_20.png',dpi=300)
 plt.show()
-
-# %%
-
+#%
 x_1_i_cc=temp_4_1_cc[np.nonzero(temp_4_1_cc<=lim_ajuste_i)]
 x_1_tf_cc=temp_4_1_cc[np.nonzero((temp_4_1_cc>lim_ajuste_tf) & (temp_4_1_cc<lim_ajuste_f))]
 x_1_f_cc=temp_4_1_cc[np.nonzero(temp_4_1_cc>=lim_ajuste_f)]
 
-y_1_i_cc=tau_4_1[np.nonzero(temp_4_1_cc<=lim_ajuste_i)]
-y_1_tf_cc=tau_4_1[np.nonzero((temp_4_1_cc>lim_ajuste_tf) & (temp_4_1_cc<lim_ajuste_f))]
-y_1_f_cc=tau_4_1[np.nonzero(temp_4_1_cc>=lim_ajuste_f)]
+y_1_i_cc=tau_4_1_cc[np.nonzero(temp_4_1_cc<=lim_ajuste_i)]
+y_1_tf_cc=tau_4_1_cc[np.nonzero((temp_4_1_cc>lim_ajuste_tf) & (temp_4_1_cc<lim_ajuste_f))]
+y_1_f_cc=tau_4_1_cc[np.nonzero(temp_4_1_cc>=lim_ajuste_f)]
 
 x_2_i_cc=temp_4_2_cc[np.nonzero(temp_4_2_cc<=lim_ajuste_i)]
 x_2_tf_cc=temp_4_2_cc[np.nonzero((temp_4_2_cc>lim_ajuste_tf) & (temp_4_2_cc<lim_ajuste_f))]
 x_2_f_cc=temp_4_2_cc[np.nonzero(temp_4_2_cc>=lim_ajuste_f)]
 
-y_2_i_cc=tau_4_2[np.nonzero(temp_4_2_cc<=lim_ajuste_i)]
-y_2_tf_cc=tau_4_2[np.nonzero((temp_4_2_cc>lim_ajuste_tf) & (temp_4_2_cc<lim_ajuste_f))]
-y_2_f_cc=tau_4_2[np.nonzero(temp_4_2_cc>=lim_ajuste_f)]
+y_2_i_cc=tau_4_2_cc[np.nonzero(temp_4_2_cc<=lim_ajuste_i)]
+y_2_tf_cc=tau_4_2_cc[np.nonzero((temp_4_2_cc>lim_ajuste_tf) & (temp_4_2_cc<lim_ajuste_f))]
+y_2_f_cc=tau_4_2_cc[np.nonzero(temp_4_2_cc>=lim_ajuste_f)]
 
 x_3_i_cc=temp_4_3_cc[np.nonzero(temp_4_3_cc<=lim_ajuste_i)]
 x_3_tf_cc=temp_4_3_cc[np.nonzero((temp_4_3_cc>lim_ajuste_tf) & (temp_4_3_cc<lim_ajuste_f))]
 x_3_f_cc=temp_4_3_cc[np.nonzero(temp_4_3_cc>=lim_ajuste_f)]
 
-y_3_i_cc=tau_4_3[np.nonzero(temp_4_3_cc<=lim_ajuste_i)]
-y_3_tf_cc=tau_4_3[np.nonzero((temp_4_3_cc>lim_ajuste_tf) & (temp_4_3_cc<lim_ajuste_f))]
-y_3_f_cc=tau_4_3[np.nonzero(temp_4_3_cc>=lim_ajuste_f)]
+y_3_i_cc=tau_4_3_cc[np.nonzero(temp_4_3_cc<=lim_ajuste_i)]
+y_3_tf_cc=tau_4_3_cc[np.nonzero((temp_4_3_cc>lim_ajuste_tf) & (temp_4_3_cc<lim_ajuste_f))]
+y_3_f_cc=tau_4_3_cc[np.nonzero(temp_4_3_cc>=lim_ajuste_f)]
 
 x_all_i_cc = np.concatenate((x_1_i_cc, x_2_i_cc, x_3_i_cc))
 y_all_i_cc = np.concatenate((y_1_i_cc, y_2_i_cc, y_3_i_cc))
@@ -1091,18 +1350,279 @@ y_aux_tf=lineal(x_aux_tf,slope_tf_cc,intercept_tf_cc)
 x_aux_f=np.linspace(lim_ajuste_f,25,1000)
 y_aux_f=lineal(x_aux_f,slope_f_cc,intercept_f_cc)
 
-fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
-ax.plot(x_all_i_cc, y_all_i_cc, '.',label=f'i: [{min(x_all_i_cc)} ; {lim_ajuste_i}]°C')
-ax.plot(x_aux_i,y_aux_i,label=f'{a_i_cc:.1uf} ns/°C')
-ax.plot(x_all_tf_cc, y_all_tf_cc,'.', label=f'tf: [{lim_ajuste_i} ; {lim_ajuste_f}]°C')
-ax.plot(x_aux_tf,y_aux_tf,label=f'{a_tf_cc:.1uf} ns/°C')
-ax.plot(x_all_f_cc, y_all_f_cc, '.',label=f'f: [{lim_ajuste_f} ; {max(x_all_f_cc)}]°C')
-ax.plot(x_aux_f,y_aux_f,label=f'{a_f_cc:.1uf} ns/°C')
+# fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+# ax.plot(x_all_i_cc, y_all_i_cc, '.',label=f'i: [{min(x_all_i_cc)} ; {lim_ajuste_i}]°C')
+# ax.plot(x_aux_i,y_aux_i,label=f'{a_i_cc:.1uf} ns/°C')
+# ax.plot(x_all_tf_cc, y_all_tf_cc,'.', label=f'tf: [{lim_ajuste_i} ; {lim_ajuste_f}]°C')
+# ax.plot(x_aux_tf,y_aux_tf,label=f'{a_tf_cc:.1uf} ns/°C')
+# ax.plot(x_all_f_cc, y_all_f_cc, '.',label=f'f: [{lim_ajuste_f} ; {max(x_all_f_cc)}]°C')
+# ax.plot(x_aux_f,y_aux_f,label=f'{a_f_cc:.1uf} ns/°C')
 
-plt.legend(ncol=3)
+# plt.legend(ncol=3)
+# plt.grid()
+# plt.ylabel(r'$\tau$ (s)')
+# plt.xlabel('Indx')
+# plt.title(identif_4_cc)
+# #plt.savefig('tau_vs_T_'+identif_4+'.png',dpi=300)
+# plt.show()
+
+# %%
+#%% 135 kHz 20 kA/m   CC vs SC
+identif_4_sc='135_20_CsC'
+dir_4_sc = os.path.join(os.getcwd(),identif_4_sc)
+archivos_resultados = [f for f in os.listdir(dir_4_sc) if  fnmatch.fnmatch(f, '*resultados*')]
+archivos_resultados.sort()
+filepaths_sc = [os.path.join(dir_4_sc,f) for f in archivos_resultados]
+
+_,files_4_1_sc,time_4_1_sc,temp_4_1_sc,_,_,_,_,_,_,_,_,SAR_4_1_sc,tau_4_1_sc,_ = lector_resultados(filepaths_sc[0])
+_,files_4_2_sc,time_4_2_sc,temp_4_2_sc,_,_,_,_,_,_,_,_,SAR_4_2_sc,tau_4_2_sc,_ = lector_resultados(filepaths_sc[1])
+_,files_4_3_sc,time_4_3_sc,temp_4_3_sc,_,_,_,_,_,_,_,_,SAR_4_3_sc,tau_4_3_sc,_ = lector_resultados(filepaths_sc[2])
+
+tau_4_1_sc=tau_4_1_sc*1e9
+tau_4_2_sc=tau_4_2_sc*1e9
+tau_4_3_sc=tau_4_3_sc*1e9
+
+identif_4_cc='135_20_CcC'
+dir_4_cc = os.path.join(os.getcwd(),identif_4_cc)
+archivos_resultados = [f for f in os.listdir(dir_4_cc) if  fnmatch.fnmatch(f, '*resultados*')]
+archivos_resultados.sort()
+filepaths_cc = [os.path.join(dir_4_cc,f) for f in archivos_resultados]
+
+_,files_4_1_cc,time_4_1_cc,temp_4_1_cc,_,_,_,_,_,_,_,_,SAR_4_1_cc,tau_4_1_cc,_ = lector_resultados(filepaths_cc[0])
+_,files_4_2_cc,time_4_2_cc,temp_4_2_cc,_,_,_,_,_,_,_,_,SAR_4_2_cc,tau_4_2_cc,_ = lector_resultados(filepaths_cc[1])
+_,files_4_3_cc,time_4_3_cc,temp_4_3_cc,_,_,_,_,_,_,_,_,SAR_4_3_cc,tau_4_3_cc,_ = lector_resultados(filepaths_cc[2])
+
+tau_4_1_cc=tau_4_1_cc*1e9
+tau_4_2_cc=tau_4_2_cc*1e9
+tau_4_3_cc=tau_4_3_cc*1e9
+
+temp_all_sc = np.concatenate((temp_4_1_sc, temp_4_2_sc, temp_4_3_sc))
+tau_all_sc = np.concatenate((tau_4_1_sc, tau_4_2_sc, tau_4_3_sc))
+
+temp_all_cc = np.concatenate((temp_4_1_cc, temp_4_2_cc, temp_4_3_cc))
+tau_all_cc = np.concatenate((tau_4_1_cc, tau_4_2_cc, tau_4_3_cc))
+#%
+fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+
+# ax.plot(temp_all_sc,tau_all_sc,'o-',label='1 sc')
+# ax.plot(temp_all_cc,tau_all_cc,'o-',label='1 cc')
+ax.plot(temp_4_1_sc,tau_4_1_sc,'o-',c='tab:blue',label='1 sc')
+ax.plot(temp_4_2_sc,tau_4_2_sc,'o-',c='tab:blue',label='2 sc')
+ax.plot(temp_4_3_sc,tau_4_3_sc,'o-',c='tab:blue',label='3 sc')
+
+ax.plot(temp_4_1_cc,tau_4_1_cc,'s-',c='tab:orange',label='1 H$_{⟂}$')
+ax.plot(temp_4_2_cc,tau_4_2_cc,'s-',c='tab:orange',label='2 H$_{⟂}$')
+ax.plot(temp_4_3_cc,tau_4_3_cc,'s-',c='tab:orange',label='3 H$_{⟂}$')
+
+plt.legend(ncol=2)
+plt.grid()
+plt.ylabel(r'$\tau$ (ns)')
+plt.xlabel('Temperatura (ºC)')
+plt.title(identif_4_sc +' - '+identif_4_cc)
+plt.xlim(-10,10)
+plt.savefig('tau_vs_T_comparativa_'+identif_4_sc+' '+identif_4_cc + '_zoom.png',dpi=300)
+plt.show()
+
+#%%
+lim_ajuste_i= -6
+lim_ajuste_tf = -4.0
+lim_ajuste_f= 0
+#% SC
+x_1_i_sc=temp_4_1_sc[np.nonzero(temp_4_1_sc<=lim_ajuste_i)]
+x_1_tf_sc=temp_4_1_sc[np.nonzero((temp_4_1_sc>lim_ajuste_tf) & (temp_4_1_sc<lim_ajuste_f))]
+x_1_f_sc=temp_4_1_sc[np.nonzero(temp_4_1_sc>=lim_ajuste_f)]
+
+y_1_i_sc=tau_4_1_sc[np.nonzero(temp_4_1_sc<=lim_ajuste_i)]
+y_1_tf_sc=tau_4_1_sc[np.nonzero((temp_4_1_sc>lim_ajuste_tf) & (temp_4_1_sc<lim_ajuste_f))]
+y_1_f_sc=tau_4_1_sc[np.nonzero(temp_4_1_sc>=lim_ajuste_f)]
+
+x_2_i_sc=temp_4_2_sc[np.nonzero(temp_4_2_sc<=lim_ajuste_i)]
+x_2_tf_sc=temp_4_2_sc[np.nonzero((temp_4_2_sc>lim_ajuste_tf) & (temp_4_2_sc<lim_ajuste_f))]
+x_2_f_sc=temp_4_2_sc[np.nonzero(temp_4_2_sc>=lim_ajuste_f)]
+
+y_2_i_sc=tau_4_2_sc[np.nonzero(temp_4_2_sc<=lim_ajuste_i)]
+y_2_tf_sc=tau_4_2_sc[np.nonzero((temp_4_2_sc>lim_ajuste_tf) & (temp_4_2_sc<lim_ajuste_f))]
+y_2_f_sc=tau_4_2_sc[np.nonzero(temp_4_2_sc>=lim_ajuste_f)]
+
+x_3_i_sc=temp_4_3_sc[np.nonzero(temp_4_3_sc<=lim_ajuste_i)]
+x_3_tf_sc=temp_4_3_sc[np.nonzero((temp_4_3_sc>lim_ajuste_tf) & (temp_4_3_sc<lim_ajuste_f))]
+x_3_f_sc=temp_4_3_sc[np.nonzero(temp_4_3_sc>=lim_ajuste_f)]
+
+y_3_i_sc=tau_4_3_sc[np.nonzero(temp_4_3_sc<=lim_ajuste_i)]
+y_3_tf_sc=tau_4_3_sc[np.nonzero((temp_4_3_sc>lim_ajuste_tf) & (temp_4_3_sc<lim_ajuste_f))]
+y_3_f_sc=tau_4_3_sc[np.nonzero(temp_4_3_sc>=lim_ajuste_f)]
+
+x_all_i_sc = np.concatenate((x_1_i_sc, x_2_i_sc, x_3_i_sc))
+y_all_i_sc = np.concatenate((y_1_i_sc, y_2_i_sc, y_3_i_sc))
+x_all_tf_sc = np.concatenate((x_1_tf_sc, x_2_tf_sc, x_3_tf_sc))
+y_all_tf_sc = np.concatenate((y_1_tf_sc, y_2_tf_sc, y_3_tf_sc))
+x_all_f_sc = np.concatenate((x_1_f_sc, x_2_f_sc, x_3_f_sc))
+y_all_f_sc = np.concatenate((y_1_f_sc, y_2_f_sc, y_3_f_sc))
+
+# Realizar el ajuste lineal
+slope_i_sc, intercept_i_sc, r_value_i_sc, p_value_i_sc, std_err_i_sc = linregress(x_all_i_sc, y_all_i_sc)
+slope_tf_sc, intercept_tf_sc, r_value_tf_sc, p_value_tf_sc, std_err_tf_sc = linregress(x_all_tf_sc, y_all_tf_sc)
+slope_f_sc, intercept_f_sc, r_value_f_sc, p_value_f_sc, std_err_f_sc = linregress(x_all_f_sc, y_all_f_sc)
+a_i_sc = ufloat(slope_i_sc,std_err_i_sc)
+a_tf_sc = ufloat(slope_tf_sc,std_err_tf_sc)
+a_f_sc = ufloat(slope_f_sc,std_err_f_sc)
+
+# Mostrar los resultados del ajuste lineal
+print('FF congelado SIN campo')
+print(f'Pendiente_i: {a_i_sc}') 
+print(f'Pendiente_tf: {a_tf_sc}')
+print(f'Pendiente_f: {a_f_sc}')
+
+x_sc_i=np.linspace(-50,lim_ajuste_i,1000)
+y_sc_i=lineal(x_sc_i,slope_i_sc,intercept_i_sc)
+x_sc_tf=np.linspace(lim_ajuste_tf,lim_ajuste_f,1000)
+y_sc_tf=lineal(x_sc_tf,slope_tf_sc,intercept_tf_sc)
+x_sc_f=np.linspace(lim_ajuste_f,25,1000)
+y_sc_f=lineal(x_sc_f,slope_f_sc,intercept_f_sc)
+
+#% CC
+x_1_i_cc=temp_4_1_cc[np.nonzero(temp_4_1_cc<=lim_ajuste_i)]
+x_1_tf_cc=temp_4_1_cc[np.nonzero((temp_4_1_cc>lim_ajuste_tf) & (temp_4_1_cc<lim_ajuste_f))]
+x_1_f_cc=temp_4_1_cc[np.nonzero(temp_4_1_cc>=lim_ajuste_f)]
+
+y_1_i_cc=tau_4_1_cc[np.nonzero(temp_4_1_cc<=lim_ajuste_i)]
+y_1_tf_cc=tau_4_1_cc[np.nonzero((temp_4_1_cc>lim_ajuste_tf) & (temp_4_1_cc<lim_ajuste_f))]
+y_1_f_cc=tau_4_1_cc[np.nonzero(temp_4_1_cc>=lim_ajuste_f)]
+
+x_2_i_cc=temp_4_2_cc[np.nonzero(temp_4_2_cc<=lim_ajuste_i)]
+x_2_tf_cc=temp_4_2_cc[np.nonzero((temp_4_2_cc>lim_ajuste_tf) & (temp_4_2_cc<lim_ajuste_f))]
+x_2_f_cc=temp_4_2_cc[np.nonzero(temp_4_2_cc>=lim_ajuste_f)]
+
+y_2_i_cc=tau_4_2_cc[np.nonzero(temp_4_2_cc<=lim_ajuste_i)]
+y_2_tf_cc=tau_4_2_cc[np.nonzero((temp_4_2_cc>lim_ajuste_tf) & (temp_4_2_cc<lim_ajuste_f))]
+y_2_f_cc=tau_4_2_cc[np.nonzero(temp_4_2_cc>=lim_ajuste_f)]
+
+x_3_i_cc=temp_4_3_cc[np.nonzero(temp_4_3_cc<=lim_ajuste_i)]
+x_3_tf_cc=temp_4_3_cc[np.nonzero((temp_4_3_cc>lim_ajuste_tf) & (temp_4_3_cc<lim_ajuste_f))]
+x_3_f_cc=temp_4_3_cc[np.nonzero(temp_4_3_cc>=lim_ajuste_f)]
+
+y_3_i_cc=tau_4_3_cc[np.nonzero(temp_4_3_cc<=lim_ajuste_i)]
+y_3_tf_cc=tau_4_3_cc[np.nonzero((temp_4_3_cc>lim_ajuste_tf) & (temp_4_3_cc<lim_ajuste_f))]
+y_3_f_cc=tau_4_3_cc[np.nonzero(temp_4_3_cc>=lim_ajuste_f)]
+
+x_all_i_cc = np.concatenate((x_1_i_cc, x_2_i_cc, x_3_i_cc))
+y_all_i_cc = np.concatenate((y_1_i_cc, y_2_i_cc, y_3_i_cc))
+x_all_tf_cc = np.concatenate((x_1_tf_cc, x_2_tf_cc, x_3_tf_cc))
+y_all_tf_cc = np.concatenate((y_1_tf_cc, y_2_tf_cc, y_3_tf_cc))
+x_all_f_cc = np.concatenate((x_1_f_cc, x_2_f_cc, x_3_f_cc))
+y_all_f_cc = np.concatenate((y_1_f_cc, y_2_f_cc, y_3_f_cc))
+
+# Realizar el ajuste lineal
+slope_i_cc, intercept_i_cc, r_value_i_cc, p_value_i_cc, std_err_i_cc = linregress(x_all_i_cc, y_all_i_cc)
+slope_tf_cc, intercept_tf_cc, r_value_tf_cc, p_value_tf_cc, std_err_tf_cc = linregress(x_all_tf_cc, y_all_tf_cc)
+slope_f_cc, intercept_f_cc, r_value_f_cc, p_value_f_cc, std_err_f_cc = linregress(x_all_f_cc, y_all_f_cc)
+a_i_cc = ufloat(slope_i_cc,std_err_i_cc)
+a_tf_cc = ufloat(slope_tf_cc,std_err_tf_cc)
+a_f_cc = ufloat(slope_f_cc,std_err_f_cc)
+
+# Mostrar los resultados del ajuste lineal
+print('FF congelado CON campo')
+print(f'Pendiente_i: {a_i_cc}') 
+print(f'Pendiente_tf: {a_tf_cc}')
+print(f'Pendiente_f: {a_f_cc}')
+
+x_cc_i=np.linspace(-50,lim_ajuste_i,1000)
+y_cc_i=lineal(x_cc_i,slope_i_cc,intercept_i_cc)
+x_cc_tf=np.linspace(lim_ajuste_tf,lim_ajuste_f,1000)
+y_cc_tf=lineal(x_cc_tf,slope_tf_cc,intercept_tf_cc)
+x_cc_f=np.linspace(lim_ajuste_f,25,1000)
+y_cc_f=lineal(x_cc_f,slope_f_cc,intercept_f_cc)
+
+#%%
+fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+ax.plot(x_all_i_sc, y_all_i_sc, 'o',label=f'i: [{min(x_all_i_sc)} ; {lim_ajuste_i}]°C')
+ax.plot(x_sc_i,y_sc_i,label=f'{a_i_sc:.1uf} ns/°C')
+ax.plot(x_all_tf_sc, y_all_tf_sc,'o', label=f'tf: [{lim_ajuste_i} ; {lim_ajuste_f}]°C')
+ax.plot(x_sc_tf,y_sc_tf,label=f'{a_tf_sc:.1uf} ns/°C')
+ax.plot(x_all_f_sc, y_all_f_sc, 'o',label=f'f: [{lim_ajuste_f} ; {max(x_all_f_sc)}]°C')
+ax.plot(x_sc_f,y_sc_f,label=f'{a_f_sc:.1uf} ns/°C')
+
+ax.plot(x_all_i_cc, y_all_i_cc, 'o',label=f'i: [{min(x_all_i_cc)} ; {lim_ajuste_i}]°C')
+ax.plot(x_cc_i,y_cc_i,label=f'{a_i_cc:.1uf} ns/°C')
+ax.plot(x_all_tf_cc, y_all_tf_cc,'o', label=f'tf: [{lim_ajuste_i} ; {lim_ajuste_f}]°C')
+ax.plot(x_cc_tf,y_cc_tf,label=f'{a_tf_cc:.1uf} ns/°C')
+ax.plot(x_all_f_cc, y_all_f_cc, 'o',label=f'f: [{lim_ajuste_f} ; {max(x_all_f_cc)}]°C')
+ax.plot(x_cc_f,y_cc_f,label=f'{a_f_cc:.1uf} ns/°C')
+
+plt.legend(ncol=2)
 plt.grid()
 plt.ylabel(r'$\tau$ (s)')
-plt.xlabel('Indx')
-plt.title(identif_4_cc)
-#plt.savefig('tau_vs_T_'+identif_4+'.png',dpi=300)
+plt.xlabel('Temperatura (°C)')
+plt.title(identif_4_sc +' - ' + identif_4_sc)
+plt.savefig('tau_vs_T_ajustes_265_20.png',dpi=300)
 plt.show()
+#%
+x_1_i_cc=temp_4_1_cc[np.nonzero(temp_4_1_cc<=lim_ajuste_i)]
+x_1_tf_cc=temp_4_1_cc[np.nonzero((temp_4_1_cc>lim_ajuste_tf) & (temp_4_1_cc<lim_ajuste_f))]
+x_1_f_cc=temp_4_1_cc[np.nonzero(temp_4_1_cc>=lim_ajuste_f)]
+
+y_1_i_cc=tau_4_1_cc[np.nonzero(temp_4_1_cc<=lim_ajuste_i)]
+y_1_tf_cc=tau_4_1_cc[np.nonzero((temp_4_1_cc>lim_ajuste_tf) & (temp_4_1_cc<lim_ajuste_f))]
+y_1_f_cc=tau_4_1_cc[np.nonzero(temp_4_1_cc>=lim_ajuste_f)]
+
+x_2_i_cc=temp_4_2_cc[np.nonzero(temp_4_2_cc<=lim_ajuste_i)]
+x_2_tf_cc=temp_4_2_cc[np.nonzero((temp_4_2_cc>lim_ajuste_tf) & (temp_4_2_cc<lim_ajuste_f))]
+x_2_f_cc=temp_4_2_cc[np.nonzero(temp_4_2_cc>=lim_ajuste_f)]
+
+y_2_i_cc=tau_4_2_cc[np.nonzero(temp_4_2_cc<=lim_ajuste_i)]
+y_2_tf_cc=tau_4_2_cc[np.nonzero((temp_4_2_cc>lim_ajuste_tf) & (temp_4_2_cc<lim_ajuste_f))]
+y_2_f_cc=tau_4_2_cc[np.nonzero(temp_4_2_cc>=lim_ajuste_f)]
+
+x_3_i_cc=temp_4_3_cc[np.nonzero(temp_4_3_cc<=lim_ajuste_i)]
+x_3_tf_cc=temp_4_3_cc[np.nonzero((temp_4_3_cc>lim_ajuste_tf) & (temp_4_3_cc<lim_ajuste_f))]
+x_3_f_cc=temp_4_3_cc[np.nonzero(temp_4_3_cc>=lim_ajuste_f)]
+
+y_3_i_cc=tau_4_3_cc[np.nonzero(temp_4_3_cc<=lim_ajuste_i)]
+y_3_tf_cc=tau_4_3_cc[np.nonzero((temp_4_3_cc>lim_ajuste_tf) & (temp_4_3_cc<lim_ajuste_f))]
+y_3_f_cc=tau_4_3_cc[np.nonzero(temp_4_3_cc>=lim_ajuste_f)]
+
+x_all_i_cc = np.concatenate((x_1_i_cc, x_2_i_cc, x_3_i_cc))
+y_all_i_cc = np.concatenate((y_1_i_cc, y_2_i_cc, y_3_i_cc))
+x_all_tf_cc = np.concatenate((x_1_tf_cc, x_2_tf_cc, x_3_tf_cc))
+y_all_tf_cc = np.concatenate((y_1_tf_cc, y_2_tf_cc, y_3_tf_cc))
+x_all_f_cc = np.concatenate((x_1_f_cc, x_2_f_cc, x_3_f_cc))
+y_all_f_cc = np.concatenate((y_1_f_cc, y_2_f_cc, y_3_f_cc))
+
+# Realizar el ajuste lineal
+slope_i_cc, intercept_i_cc, r_value_i_cc, p_value_i_cc, std_err_i_cc = linregress(x_all_i_cc, y_all_i_cc)
+slope_tf_cc, intercept_tf_cc, r_value_tf_cc, p_value_tf_cc, std_err_tf_cc = linregress(x_all_tf_cc, y_all_tf_cc)
+slope_f_cc, intercept_f_cc, r_value_f_cc, p_value_f_cc, std_err_f_cc = linregress(x_all_f_cc, y_all_f_cc)
+a_i_cc = ufloat(slope_i_cc,std_err_i_cc)
+a_tf_cc = ufloat(slope_tf_cc,std_err_tf_cc)
+a_f_cc = ufloat(slope_f_cc,std_err_f_cc)
+
+# Mostrar los resultados del ajuste lineal
+print(f'Pendiente_i: {a_i_cc}') 
+print(f'Pendiente_tf: {a_tf_cc}')
+print(f'Pendiente_f: {a_f_cc}')
+# print(f"Intersección_i: {intercept_i} - Intersección_f: {intercept_f}")
+
+x_aux_i=np.linspace(-50,lim_ajuste_i,1000)
+y_aux_i=lineal(x_aux_i,slope_i_cc,intercept_i_cc)
+x_aux_tf=np.linspace(lim_ajuste_tf,lim_ajuste_f,1000)
+y_aux_tf=lineal(x_aux_tf,slope_tf_cc,intercept_tf_cc)
+x_aux_f=np.linspace(lim_ajuste_f,25,1000)
+y_aux_f=lineal(x_aux_f,slope_f_cc,intercept_f_cc)
+
+# fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+# ax.plot(x_all_i_cc, y_all_i_cc, '.',label=f'i: [{min(x_all_i_cc)} ; {lim_ajuste_i}]°C')
+# ax.plot(x_aux_i,y_aux_i,label=f'{a_i_cc:.1uf} ns/°C')
+# ax.plot(x_all_tf_cc, y_all_tf_cc,'.', label=f'tf: [{lim_ajuste_i} ; {lim_ajuste_f}]°C')
+# ax.plot(x_aux_tf,y_aux_tf,label=f'{a_tf_cc:.1uf} ns/°C')
+# ax.plot(x_all_f_cc, y_all_f_cc, '.',label=f'f: [{lim_ajuste_f} ; {max(x_all_f_cc)}]°C')
+# ax.plot(x_aux_f,y_aux_f,label=f'{a_f_cc:.1uf} ns/°C')
+
+# plt.legend(ncol=3)
+# plt.grid()
+# plt.ylabel(r'$\tau$ (s)')
+# plt.xlabel('Indx')
+# plt.title(identif_4_cc)
+# #plt.savefig('tau_vs_T_'+identif_4+'.png',dpi=300)
+# plt.show()
+
+# %%
