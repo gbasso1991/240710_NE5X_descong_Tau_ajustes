@@ -179,670 +179,709 @@ def Tau_promedio(filepath,recorto_extremos=20):
     plt.suptitle(meta['filename'])
 
     return Meq , H_mag, max(H)/1000, Tau , Tau_prom , fig
-#%% 135 05
-identif_0='135_20'
-dir_0 = os.path.join(os.getcwd(),identif_0)
-archivos_resultados = [f for f in os.listdir(dir_0) if  fnmatch.fnmatch(f, '*resultados*')]
-archivos_resultados.sort()
-filepaths = [os.path.join(dir_0,f) for f in archivos_resultados]
-meta_1,files_1,time_1,temperatura_0_1,Mr_1,Hc_1,campo_max_1,mag_max_1,xi_M_0_1,frecuencia_fund_1,magnitud_fund_0_1,dphi_fem_0_1,SAR_0_1,tau_0_1,N1 = lector_resultados(filepaths[0])
-meta_2,files_2,time_2,temperatura_0_2,Mr_2,Hc_2,campo_max_2,mag_max_2,xi_M_0_2,frecuencia_fund_2,magnitud_fund_0_2,dphi_fem_0_2,SAR_0_2,tau_0_2,N2 = lector_resultados(filepaths[1])
-meta_3,files_3,time_3,temperatura_0_3,Mr_3,Hc_3,campo_max_3,mag_max_3,xi_M_0_3,frecuencia_fund_3,magnitud_fund_0_3,dphi_fem_0_3,SAR_0_3,tau_0_3,N3 = lector_resultados(filepaths[2])
-
-taus_0=np.array([ufloat(np.mean(tau_0_1),np.std(tau_0_1)),ufloat(np.mean(tau_0_2),np.std(tau_0_2)),ufloat(np.mean(tau_0_3),np.std(tau_0_3))])*1e9
-SARs_0=np.array([ufloat(np.mean(SAR_0_1),np.std(SAR_0_1)),ufloat(np.mean(SAR_0_2),np.std(SAR_0_2)),ufloat(np.mean(SAR_0_3),np.std(SAR_0_3))])
-
-for i,ar in enumerate(archivos_resultados):
-    print('File:',ar,f'- tau: {taus_0[i]:.2f} ns',f'- SAR: {SARs_0[i]:.1f} W/g')
-ufloat(np.mean([t.nominal_value for t in taus_0]),np.std([t.nominal_value for t in taus_0]))
-
-print(f'\nPromedio de las {len(taus_0)} medidas:')
-tau0 = np.mean(unumpy.uarray([np.mean(tau_0_1),np.mean(tau_0_2),np.mean(tau_0_3)],[np.std(tau_0_1),np.std(tau_0_2),np.std(tau_0_3)]))*1e9
-print(f' tau = {tau0} ns')
-SAR0 = ufloat(np.mean([S.nominal_value for S in SARs_0]),np.std([S.nominal_value for S in SARs_0]))
-print(f' SAR = {SAR0:.2uf} W/g')
-
-fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
-ax.plot(temperatura_0_1,tau_0_1,'.-',label='1')
-ax.plot(temperatura_0_2,tau_0_2,'.-',label='2')
-ax.plot(temperatura_0_3,tau_0_3,'.-',label='3')
-ax.text(0.95,0.1,rf'<$\tau$> = {tau0:.1uf} ns',bbox=dict(alpha=0.8),transform=ax.transAxes,ha='right', va='bottom')
-plt.legend()
-plt.grid()
-plt.ylabel(r'$\tau$ (s)')
-plt.xlabel('T (°C)')
-plt.title(r'$\tau$ - '+ identif_0)
-plt.savefig('tau_vs_T_'+identif_0+'.png',dpi=300)
-plt.show()
-
-archivos_ciclos_0 = [f for f in os.listdir(dir_0) if  fnmatch.fnmatch(f, '*promedio*')]
-archivos_ciclos_0.sort()
-filepaths_0 = [os.path.join(dir_0,f) for f in archivos_ciclos_0]
-for ac in archivos_ciclos_0:
-    print(ac)
-
-fig1,ax1=plt.subplots(figsize=(8,6),constrained_layout=True)
-
-for i,fp in enumerate(filepaths_0):
-    t,H,M,metadata=lector_ciclos(fp)
-    ax1.plot(H,M,label=f'{SARs_0[i]:1f} W/g')
-
-ax1.text(0.95,0.1,f'<SAR> = {SAR0:.2uf} W/g',bbox=dict(alpha=0.8),transform=ax1.transAxes,ha='right', va='bottom')
-ax1.set_ylabel('M (A/m)')
-ax1.set_xlabel('H (A/m)')
-ax1.legend()
-ax1.grid()
-plt.title('Ciclos promedio - '+identif_0)
-plt.savefig('ciclos_promedio_'+identif_0+'.png',dpi=300)
-plt.show()
-
-#%% 135 10 
-identif_1='135_38'
-dir_1 = os.path.join(os.getcwd(),identif_1)
-archivos_resultados = [f for f in os.listdir(dir_1) if  fnmatch.fnmatch(f, '*resultados*')]
-archivos_resultados.sort()
-filepaths = [os.path.join(dir_1,f) for f in archivos_resultados]
-meta_1,files_1,time_1,temperatura_1_1,Mr_1,Hc_1,campo_max_1,mag_max_1,xi_M_0_1,frecuencia_fund_1,magnitud_fund_1_1,dphi_fem_1_1,SAR_1_1,tau_1_1,N1 = lector_resultados(filepaths[0])
-meta_2,files_2,time_2,temperatura_1_2,Mr_2,Hc_2,campo_max_2,mag_max_2,xi_M_0_2,frecuencia_fund_2,magnitud_fund_1_2,dphi_fem_1_2,SAR_1_2,tau_1_2,N2 = lector_resultados(filepaths[1])
-meta_3,files_3,time_3,temperatura_1_3,Mr_3,Hc_3,campo_max_3,mag_max_3,xi_M_0_3,frecuencia_fund_3,magnitud_fund_1_3,dphi_fem_1_3,SAR_1_3,tau_1_3,N3 = lector_resultados(filepaths[2])
-
-taus_1=np.array([ufloat(np.mean(tau_1_1),np.std(tau_1_1)),ufloat(np.mean(tau_1_2),np.std(tau_1_2)),ufloat(np.mean(tau_1_3),np.std(tau_1_3))])*1e9
-SARs_1=np.array([ufloat(np.mean(SAR_1_1),np.std(SAR_1_1)),ufloat(np.mean(SAR_1_2),np.std(SAR_1_2)),ufloat(np.mean(SAR_1_3),np.std(SAR_1_3))])
-
-for i,ar in enumerate(archivos_resultados):
-    print('File:',ar,f'- tau: {taus_1[i]:.2f} ns',f'- SAR: {SARs_1[i]:.1f} W/g')
-ufloat(np.mean([t.nominal_value for t in taus_1]),np.std([t.nominal_value for t in taus_1]))
-
-print(f'\nPromedio de las {len(taus_1)} medidas:')
-tau1 = np.mean(unumpy.uarray([np.mean(tau_1_1),np.mean(tau_1_2),np.mean(tau_1_3)],[np.std(tau_1_1),np.std(tau_1_2),np.std(tau_1_3)]))*1e9
-print(f' tau = {tau1} ns')
-SAR1 = ufloat(np.mean([S.nominal_value for S in SARs_1]),np.std([S.nominal_value for S in SARs_1]))
-print(f' SAR = {SAR1:.2uf} W/g')
-
-fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
-ax.plot(temperatura_1_1,tau_1_1,'.-',label='1')
-ax.plot(temperatura_1_2,tau_1_2,'.-',label='2')
-ax.plot(temperatura_1_3,tau_1_3,'.-',label='3')
-ax.text(0.95,0.1,rf'<$\tau$> = {tau1:.1uf} ns',bbox=dict(alpha=0.8),transform=ax.transAxes,ha='right', va='bottom')
-plt.legend()
-plt.grid()
-plt.ylabel(r'$\tau$ (s)')
-plt.xlabel('T (°C)')
-plt.title(r'$\tau$ - '+ identif_1)
-plt.savefig('tau_vs_T_'+identif_1+'.png',dpi=300)
-plt.show()
-
-archivos_ciclos_1 = [f for f in os.listdir(dir_1) if  fnmatch.fnmatch(f, '*promedio*')]
-archivos_ciclos_1.sort()
-filepaths_1 = [os.path.join(dir_1,f) for f in archivos_ciclos_1]
-for ac in archivos_ciclos_1:
-    print(ac)
-
-fig1,ax1=plt.subplots(figsize=(8,6),constrained_layout=True)
-
-for i,fp in enumerate(filepaths_1):
-    t,H,M,metadata=lector_ciclos(fp)
-    ax1.plot(H,M,label=f'{SARs_1[i]:1f} W/g')
-
-ax1.text(0.95,0.1,f'<SAR> = {SAR1:.2uf} W/g',bbox=dict(alpha=0.8),transform=ax1.transAxes,ha='right', va='bottom')
-ax1.set_ylabel('M (A/m)')
-ax1.set_xlabel('H (A/m)')
-ax1.legend()
-ax1.grid()
-plt.title('Ciclos promedio - '+identif_1)
-plt.savefig('ciclos_promedio_'+identif_1+'.png',dpi=300)
-plt.show()
-#%% 135 15 
-identif_2='135_57'
-dir_2 = os.path.join(os.getcwd(),identif_2)
-archivos_resultados = [f for f in os.listdir(dir_2) if  fnmatch.fnmatch(f, '*resultados*')]
-archivos_resultados.sort()
-filepaths = [os.path.join(dir_2,f) for f in archivos_resultados]
-meta_1,files_1,time_1,temperatura_2_1,Mr_1,Hc_1,campo_max_1,mag_max_1,xi_M_0_1,frecuencia_fund_1,magnitud_fund_2_1,dphi_fem_2_1,SAR_2_1,tau_2_1,N1 = lector_resultados(filepaths[0])
-meta_2,files_2,time_2,temperatura_2_2,Mr_2,Hc_2,campo_max_2,mag_max_2,xi_M_0_2,frecuencia_fund_2,magnitud_fund_2_2,dphi_fem_2_2,SAR_2_2,tau_2_2,N2 = lector_resultados(filepaths[1])
-meta_3,files_3,time_3,temperatura_2_3,Mr_3,Hc_3,campo_max_3,mag_max_3,xi_M_0_3,frecuencia_fund_3,magnitud_fund_2_3,dphi_fem_2_3,SAR_2_3,tau_2_3,N3 = lector_resultados(filepaths[2])
-
-taus_2=np.array([ufloat(np.mean(tau_2_1),np.std(tau_2_1)),ufloat(np.mean(tau_2_2),np.std(tau_2_2)),ufloat(np.mean(tau_2_3),np.std(tau_2_3))])*1e9
-SARs_2=np.array([ufloat(np.mean(SAR_2_1),np.std(SAR_2_1)),ufloat(np.mean(SAR_2_2),np.std(SAR_2_2)),ufloat(np.mean(SAR_2_3),np.std(SAR_2_3))])
-
-for i,ar in enumerate(archivos_resultados):
-    print('File:',ar,f'- tau: {taus_2[i]:.2f} ns',f'- SAR: {SARs_2[i]:.1f} W/g')
-ufloat(np.mean([t.nominal_value for t in taus_2]),np.std([t.nominal_value for t in taus_2]))
-
-print(f'\nPromedio de las {len(taus_2)} medidas:')
-tau2 = np.mean(unumpy.uarray([np.mean(tau_2_1),np.mean(tau_2_2),np.mean(tau_2_3)],[np.std(tau_2_1),np.std(tau_2_2),np.std(tau_2_3)]))*1e9
-print(f' tau = {tau2} ns')
-SAR2 = ufloat(np.mean([S.nominal_value for S in SARs_2]),np.std([S.nominal_value for S in SARs_2]))
-print(f' SAR = {SAR2:.2uf} W/g')
-
-fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
-ax.plot(temperatura_2_1,tau_2_1,'.-',label='1')
-ax.plot(temperatura_2_2,tau_2_2,'.-',label='2')
-ax.plot(temperatura_2_3,tau_2_3,'.-',label='3')
-ax.text(0.95,0.1,rf'<$\tau$> = {tau1:.1uf} ns',bbox=dict(alpha=0.8),transform=ax.transAxes,ha='right', va='bottom')
-plt.legend()
-plt.grid()
-plt.ylabel(r'$\tau$ (s)')
-plt.xlabel('T (°C)')
-plt.title(r'$\tau$ - '+ identif_2)
-plt.savefig('tau_vs_T_'+identif_2+'.png',dpi=300)
-plt.show()
-
-archivos_ciclos_2 = [f for f in os.listdir(dir_2) if  fnmatch.fnmatch(f, '*promedio*')]
-archivos_ciclos_2.sort()
-filepaths_2 = [os.path.join(dir_2,f) for f in archivos_ciclos_2]
-for ac in archivos_ciclos_2:
-    print(ac)
-
-fig1,ax1=plt.subplots(figsize=(8,6),constrained_layout=True)
-
-for i,fp in enumerate(filepaths_2):
-    t,H,M,metadata=lector_ciclos(fp)
-    ax1.plot(H,M,label=f'{SARs_2[i]:1f} W/g')
-
-ax1.text(0.95,0.1,f'<SAR> = {SAR2:.2uf} W/g',bbox=dict(alpha=0.8),transform=ax1.transAxes,ha='right', va='bottom')
-ax1.set_ylabel('M (A/m)')
-ax1.set_xlabel('H (A/m)')
-ax1.legend()
-ax1.grid()
-plt.title('Ciclos promedio - '+identif_2)
-plt.savefig('ciclos_promedio_'+identif_2+'.png',dpi=300)
-plt.show()
-#%% 265 20
-identif_5='265_20'
-dir_5 = os.path.join(os.getcwd(),identif_5)
-archivos_resultados = [f for f in os.listdir(dir_5) if  fnmatch.fnmatch(f, '*resultados*')]
-archivos_resultados.sort()
-filepaths = [os.path.join(dir_5,f) for f in archivos_resultados]
-meta_1,files_1,time_1,temperatura_5_1,Mr_1,Hc_1,campo_max_1,mag_max_1,xi_M_5_1,frecuencia_fund_1,magnitud_fund_5_1,dphi_fem_5_1,SAR_5_1,tau_5_1,N1 = lector_resultados(filepaths[0])
-meta_2,files_2,time_2,temperatura_5_2,Mr_2,Hc_2,campo_max_2,mag_max_2,xi_M_5_2,frecuencia_fund_2,magnitud_fund_5_2,dphi_fem_5_2,SAR_5_2,tau_5_2,N2 = lector_resultados(filepaths[1])
-meta_3,files_3,time_3,temperatura_5_3,Mr_3,Hc_3,campo_max_3,mag_max_3,xi_M_5_3,frecuencia_fund_3,magnitud_fund_5_3,dphi_fem_5_3,SAR_5_3,tau_5_3,N3 = lector_resultados(filepaths[2])
-
-taus_5=np.array([ufloat(np.mean(tau_5_1),np.std(tau_5_1)),ufloat(np.mean(tau_5_2),np.std(tau_5_2)),ufloat(np.mean(tau_5_3),np.std(tau_5_3))])*1e9
-SARs_5=np.array([ufloat(np.mean(SAR_5_1),np.std(SAR_5_1)),ufloat(np.mean(SAR_5_2),np.std(SAR_5_2)),ufloat(np.mean(SAR_5_3),np.std(SAR_5_3))])
-
-for i,ar in enumerate(archivos_resultados):
-    print('File:',ar,f'- tau: {taus_5[i]:.2f} ns',f'- SAR: {SARs_5[i]:.1f} W/g')
-ufloat(np.mean([t.nominal_value for t in taus_5]),np.std([t.nominal_value for t in taus_5]))
-
-print(f'\nPromedio de las {len(taus_5)} medidas:')
-tau0 = np.mean(unumpy.uarray([np.mean(tau_5_1),np.mean(tau_5_2),np.mean(tau_5_3)],[np.std(tau_5_1),np.std(tau_5_2),np.std(tau_5_3)]))*1e9
-print(f' tau = {tau0} ns')
-SAR0 = ufloat(np.mean([S.nominal_value for S in SARs_5]),np.std([S.nominal_value for S in SARs_5]))
-print(f' SAR = {SAR0:.2uf} W/g')
-
-fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
-ax.plot(temperatura_5_1,tau_5_1,'.-',label='1')
-ax.plot(temperatura_5_2,tau_5_2,'.-',label='2')
-ax.plot(temperatura_5_3,tau_5_3,'.-',label='3')
-ax.text(0.95,0.1,rf'<$\tau$> = {tau1:.1uf} ns',bbox=dict(alpha=0.8),transform=ax.transAxes,ha='right', va='bottom')
-plt.legend()
-plt.grid()
-plt.ylabel(r'$\tau$ (s)')
-plt.xlabel('T (°C)')
-plt.title(r'$\tau$ - '+ identif_5)
-plt.savefig('tau_vs_T_'+identif_5+'.png',dpi=300)
-plt.show()
-
-archivos_ciclos_5 = [f for f in os.listdir(dir_5) if  fnmatch.fnmatch(f, '*promedio*')]
-archivos_ciclos_5.sort()
-filepaths_5 = [os.path.join(dir_5,f) for f in archivos_ciclos_5]
-for ac in archivos_ciclos_5:
-    print(ac)
-
-fig1,ax1=plt.subplots(figsize=(8,6),constrained_layout=True)
-
-for i,fp in enumerate(filepaths_5):
-    t,H,M,metadata=lector_ciclos(fp)
-    ax1.plot(H,M,label=f'{SARs_5[i]:1f} W/g')
-
-ax1.text(0.95,0.1,f'<SAR> = {SAR0:.2uf} W/g',bbox=dict(alpha=0.8),transform=ax1.transAxes,ha='right', va='bottom')
-ax1.set_ylabel('M (A/m)')
-ax1.set_xlabel('H (A/m)')
-ax1.legend()
-ax1.grid()
-plt.title('Ciclos promedio - '+identif_5)
-plt.savefig('ciclos_promedio_'+identif_5+'.png',dpi=300)
-plt.show()
-
-
-
-#%% 265 38 
-identif_3='265_38'
-dir_3 = os.path.join(os.getcwd(),identif_3)
-archivos_resultados_3 = [f for f in os.listdir(dir_3) if  fnmatch.fnmatch(f, '*resultados*')]
-archivos_resultados_3.sort()
-filepaths = [os.path.join(dir_3,f) for f in archivos_resultados_3]
-
-meta_1,files_1,time_1,temperatura_3_1,Mr_1,Hc_1,campo_max_1,mag_max_1,xi_M_0_1,frecuencia_fund_3_1,magnitud_fund_3_1,dphi_fem_3_1,SAR_3_1,tau_3_1,N1 = lector_resultados(filepaths[0])
-meta_2,files_2,time_2,temperatura_3_2,Mr_2,Hc_2,campo_max_2,mag_max_2,xi_M_0_2,frecuencia_fund_3_2,magnitud_fund_3_2,dphi_fem_3_2,SAR_3_2,tau_3_2,N2 = lector_resultados(filepaths[1])
-meta_3,files_3,time_3,temperatura_3_3,Mr_3,Hc_3,campo_max_3,mag_max_3,xi_M_0_3,frecuencia_fund_3_3,magnitud_fund_3_3,dphi_fem_3_3,SAR_3_3,tau_3_3,N3 = lector_resultados(filepaths[2])
-
-taus_3=np.array([ufloat(np.mean(tau_3_1),np.std(tau_3_1)),ufloat(np.mean(tau_3_2),np.std(tau_3_2)),ufloat(np.mean(tau_3_3),np.std(tau_3_3))])*1e9
-SARs_3=np.array([ufloat(np.mean(SAR_3_1),np.std(SAR_3_1)),ufloat(np.mean(SAR_3_2),np.std(SAR_3_2)),ufloat(np.mean(SAR_3_3),np.std(SAR_3_3))])
-
-for i,ar in enumerate(archivos_resultados):
-    print('File:',ar,f'- tau: {taus_3[i]:.2f} ns',f'- SAR: {SARs_3[i]:.1f} W/g')
-ufloat(np.mean([t.nominal_value for t in taus_3]),np.std([t.nominal_value for t in taus_3]))
-
-print(f'\nPromedio de las {len(taus_3)} medidas:')
-tau3 = np.mean(unumpy.uarray([np.mean(tau_3_1),np.mean(tau_3_2),np.mean(tau_3_3)],[np.std(tau_3_1),np.std(tau_3_2),np.std(tau_3_3)]))*1e9
-print(f' tau = {tau3} ns')
-SAR3 = ufloat(np.mean([S.nominal_value for S in SARs_3]),np.std([S.nominal_value for S in SARs_3]))
-print(f' SAR = {SAR3:.2uf} W/g')
-
-fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
-ax.plot(temperatura_3_1,tau_3_1,'.-',label='1')
-ax.plot(temperatura_3_2,tau_3_2,'.-',label='2')
-ax.plot(temperatura_3_3,tau_3_3,'.-',label='3')
-ax.text(0.95,0.1,rf'<$\tau$> = {tau3:.1uf} ns',bbox=dict(alpha=0.8),transform=ax.transAxes,ha='right', va='bottom')
-plt.legend()
-plt.grid()
-plt.ylabel(r'$\tau$ (s)')
-plt.xlabel('Indx')
-plt.title(identif_3)
-plt.savefig('tau_vs_T_'+identif_3+'.png',dpi=300)
-plt.show()
-#CICLOS
-archivos_ciclos_3 = [f for f in os.listdir(dir_3) if  fnmatch.fnmatch(f, '*promedio*')]
-archivos_ciclos_3.sort()
-filepaths_3 = [os.path.join(dir_3,f) for f in archivos_ciclos_3]
-for ac in archivos_ciclos_3:
-    print(ac)
-
-fig2,ax2=plt.subplots(figsize=(8,6),constrained_layout=True)
-for i,fp in enumerate(filepaths_3):
-    t,H,M,metadata=lector_ciclos(fp)
-    ax2.plot(H,M,label=f'{SARs_3[i]:1f} W/g')
-ax2.text(0.95,0.1,f'<SAR> = {SAR3:.2uf} W/g',bbox=dict(alpha=0.8),transform=ax2.transAxes,ha='right', va='bottom')
-
-ax2.set_ylabel('M (A/m)')
-ax2.set_xlabel('H (A/m)')
-ax2.legend()
-ax2.grid()
-plt.title('Ciclos promedio - '+identif_3)
-plt.savefig('ciclos_promedio_'+identif_3+'.png',dpi=300)
-plt.show()
-#%% 265 15
-identif_4='265_57'
-dir_4 = os.path.join(os.getcwd(),identif_4)
-archivos_resultados = [f for f in os.listdir(dir_4) if  fnmatch.fnmatch(f, '*resultados*')]
-archivos_resultados.sort()
-filepaths = [os.path.join(dir_4,f) for f in archivos_resultados]
-
-meta_1,files_1,time_1,temperatura_4_1,Mr_1,Hc_1,campo_max_1,mag_max_1,xi_M_0_1,frecuencia_fund_4_1,magnitud_fund_4_1,dphi_fem_4_1,SAR_4_1,tau_4_1,N1 = lector_resultados(filepaths[0])
-meta_2,files_2,time_2,temperatura_4_2,Mr_2,Hc_2,campo_max_2,mag_max_2,xi_M_0_2,frecuencia_fund_4_2,magnitud_fund_4_2,dphi_fem_4_2,SAR_4_2,tau_4_2,N2 = lector_resultados(filepaths[1])
-meta_3,files_3,time_3,temperatura_4_3,Mr_3,Hc_3,campo_max_3,mag_max_3,xi_M_0_3,frecuencia_fund_4_3,magnitud_fund_4_3,dphi_fem_4_3,SAR_4_3,tau_4_3,N3 = lector_resultados(filepaths[2])
-
-taus_4=np.array([ufloat(np.mean(tau_4_1),np.std(tau_4_1)),ufloat(np.mean(tau_4_2),np.std(tau_4_2)),ufloat(np.mean(tau_4_3),np.std(tau_4_3))])*1e9
-SARs_4=np.array([ufloat(np.mean(SAR_4_1),np.std(SAR_4_1)),ufloat(np.mean(SAR_4_2),np.std(SAR_4_2)),ufloat(np.mean(SAR_4_3),np.std(SAR_4_3))])
-
-for i,ar in enumerate(archivos_resultados):
-    print('File:',ar,f'- tau: {taus_4[i]:.2f} ns',f'- SAR: {SARs_4[i]:.1f} W/g')
-ufloat(np.mean([t.nominal_value for t in taus_4]),np.std([t.nominal_value for t in taus_4]))
-
-print(f'\nPromedio de las {len(taus_4)} medidas:')
-tau4 = np.mean(unumpy.uarray([np.mean(tau_4_1),np.mean(tau_4_2),np.mean(tau_4_3)],[np.std(tau_4_1),np.std(tau_4_2),np.std(tau_4_3)]))*1e9
-print(f' tau = {tau4} ns')
-SAR4 = ufloat(np.mean([S.nominal_value for S in SARs_4]),np.std([S.nominal_value for S in SARs_4]))
-print(f' SAR = {SAR4:.2uf} W/g')
-
-fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
-ax.plot(temperatura_4_1,tau_4_1,'.-',label='1')
-ax.plot(temperatura_4_2,tau_4_2,'.-',label='2')
-ax.plot(temperatura_4_3,tau_4_3,'.-',label='3')
-ax.text(0.95,0.1,rf'<$\tau$> = {tau4:.1uf} ns',bbox=dict(alpha=0.8),transform=ax.transAxes,ha='right', va='bottom')
-plt.legend()
-plt.grid()
-plt.ylabel(r'$\tau$ (s)')
-plt.xlabel('Indx')
-plt.title(identif_4)
-plt.savefig('tau_vs_T_'+identif_4+'.png',dpi=300)
-plt.show()
-#%CICLOS
-archivos_ciclos_4 = [f for f in os.listdir(dir_4) if  fnmatch.fnmatch(f, '*promedio*')]
-archivos_ciclos_4.sort()
-filepaths_4 = [os.path.join(dir_4,f) for f in archivos_ciclos_4]
-for ac in archivos_ciclos_4:
-    print(ac)
-
-fig2,ax2=plt.subplots(figsize=(8,6),constrained_layout=True)
-for i,fp in enumerate(filepaths_4):
-    t,H,M,metadata=lector_ciclos(fp)
-    ax2.plot(H,M,label=f'{SARs_4[i]:1f} W/g')
-ax2.text(0.95,0.1,f'<SAR> = {SAR4:.2uf} W/g',bbox=dict(alpha=0.8),transform=ax2.transAxes,ha='right', va='bottom')
-ax2.set_ylabel('M (A/m)')
-ax2.set_xlabel('H (A/m)')
-ax2.legend()
-ax2.grid()
-plt.title('Ciclos promedio - '+identif_4)
-plt.savefig('ciclos_promedio_'+identif_4+'.png',dpi=300)
-plt.show()
-
-
-#%% PLOTEO PARAMETROS alrededor de la Transicion de Fase
-# 135 20
-fig,((ax0,ax1,ax2),(ax3,ax4,ax5),(ax9,ax10,ax11),(ax6,ax7,ax8))= plt.subplots(ncols=3,nrows=4,figsize=(13,12),constrained_layout=True,sharex='col',sharey='row')
-ax0.plot(temperatura_0_1,np.sin(dphi_fem_0_1),'.-',color='tab:blue',label='1')
-ax1.plot(temperatura_0_2,np.sin(dphi_fem_0_2),'.-',color='tab:orange',label='2')
-ax2.plot(temperatura_0_3,np.sin(dphi_fem_0_3),'.-',color='tab:green',label='3')
-
-ax3.plot(temperatura_0_1,magnitud_fund_0_1,'.-',color='tab:blue',label='1')
-ax4.plot(temperatura_0_2,magnitud_fund_0_2,'.-',color='tab:orange',label='2')
-ax5.plot(temperatura_0_3,magnitud_fund_0_3,'.-',color='tab:green',label='3')
-
-ax9.plot(temperatura_0_1,tau_0_1*1e9,'.-',color='tab:blue',label='1')
-ax10.plot(temperatura_0_2,tau_0_2*1e9,'.-',color='tab:orange',label='2')
-ax11.plot(temperatura_0_3,tau_0_3*1e9,'.-',color='tab:green',label='3')
-
-ax6.plot(temperatura_0_1,SAR_0_1,'.-',color='tab:blue',label='1')
-ax7.plot(temperatura_0_2,SAR_0_2,'.-',color='tab:orange',label='2')
-ax8.plot(temperatura_0_3,SAR_0_3,'.-',color='tab:green',label='3')
-
-ax0.set_ylabel('$\sin \Delta \phi$')
-ax0.set_title('$\sin (\Delta \phi)$',loc='left')
-ax3.set_ylabel('|c$_0$|')
-ax3.set_title('Magnitud 1° armónico',loc='left')
-ax6.set_title('SAR',loc='left')
-ax6.set_ylabel('SAR (W/g)')
-ax9.set_title('Tiempo de relajacion',loc='left')
-ax9.set_ylabel(r'$\tau$ (ns)')
-for a in [ax0,ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8,ax9,ax10,ax11]:
-    a.set_xlim(-4,4)
-    a.grid()
-    a.legend()
-
-for a in [ax6,ax7,ax8]:
-    a.set_xlabel('T (°C)')
-
-plt.suptitle(f'NE@citrico - {identif_0.split("_")[0]} kHz - {identif_0.split("_")[1]} kA/m',fontsize=16)
-plt.savefig('sinphi_mag_SAR_tau_vs_T_'+identif_0+'.png',dpi=300)
-plt.show()#%%
-
-# 135 38
-fig,((ax0,ax1,ax2),(ax3,ax4,ax5),(ax9,ax10,ax11),(ax6,ax7,ax8))= plt.subplots(ncols=3,nrows=4,figsize=(13,12),constrained_layout=True,sharex='col',sharey='row')
-ax0.plot(temperatura_1_1,np.sin(dphi_fem_1_1),'.-',color='tab:blue',label='1')
-ax1.plot(temperatura_1_2,np.sin(dphi_fem_1_2),'.-',color='tab:orange',label='2')
-ax2.plot(temperatura_1_3,np.sin(dphi_fem_1_3),'.-',color='tab:green',label='3')
-
-ax3.plot(temperatura_1_1,magnitud_fund_1_1,'.-',color='tab:blue',label='1')
-ax4.plot(temperatura_1_2,magnitud_fund_1_2,'.-',color='tab:orange',label='2')
-ax5.plot(temperatura_1_3,magnitud_fund_1_3,'.-',color='tab:green',label='3')
-
-ax9.plot(temperatura_1_1,tau_1_1*1e9,'.-',color='tab:blue',label='1')
-ax10.plot(temperatura_1_2,tau_1_2*1e9,'.-',color='tab:orange',label='2')
-ax11.plot(temperatura_1_3,tau_1_3*1e9,'.-',color='tab:green',label='3')
-
-ax6.plot(temperatura_1_1,SAR_1_1,'.-',color='tab:blue',label='1')
-ax7.plot(temperatura_1_2,SAR_1_2,'.-',color='tab:orange',label='2')
-ax8.plot(temperatura_1_3,SAR_1_3,'.-',color='tab:green',label='3')
-
-ax0.set_ylabel('$\sin \Delta \phi$')
-ax0.set_title('$\sin (\Delta \phi)$',loc='left')
-ax3.set_ylabel('|c$_0$|')
-ax3.set_title('Magnitud 1° armónico',loc='left')
-ax6.set_title('SAR',loc='left')
-ax6.set_ylabel('SAR (W/g)')
-ax9.set_title('Tiempo de relajacion',loc='left')
-ax9.set_ylabel(r'$\tau$ (ns)')
-for a in [ax0,ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8,ax9,ax10,ax11]:
-    a.set_xlim(-4,4)
-    a.grid()
-    a.legend()
-
-for a in [ax6,ax7,ax8]:
-    a.set_xlabel('T (°C)')
-
-plt.suptitle(f'NE@citrico - {identif_1.split("_")[0]} kHz - {identif_1.split("_")[1]} kA/m',fontsize=16)
-plt.savefig('sinphi_mag_SAR_tau_vs_T_'+identif_1+'.png',dpi=300)
-plt.show()
-
-#% 135 57
-fig,((ax0,ax1,ax2),(ax3,ax4,ax5),(ax9,ax10,ax11),(ax6,ax7,ax8))= plt.subplots(ncols=3,nrows=4,figsize=(13,12),constrained_layout=True,sharex='col',sharey='row')
-ax0.plot(temperatura_2_1,np.sin(dphi_fem_2_1),'.-',color='tab:blue',label='1')
-ax1.plot(temperatura_2_2,np.sin(dphi_fem_2_2),'.-',color='tab:orange',label='2')
-ax2.plot(temperatura_2_3,np.sin(dphi_fem_2_3),'.-',color='tab:green',label='3')
-
-ax3.plot(temperatura_2_1,magnitud_fund_2_1,'.-',color='tab:blue',label='1')
-ax4.plot(temperatura_2_2,magnitud_fund_2_2,'.-',color='tab:orange',label='2')
-ax5.plot(temperatura_2_3,magnitud_fund_2_3,'.-',color='tab:green',label='3')
-
-ax9.plot(temperatura_2_1,tau_2_1*1e9,'.-',color='tab:blue',label='1')
-ax10.plot(temperatura_2_2,tau_2_2*1e9,'.-',color='tab:orange',label='2')
-ax11.plot(temperatura_2_3,tau_2_3*1e9,'.-',color='tab:green',label='3')
-
-ax6.plot(temperatura_2_1,SAR_2_1,'.-',color='tab:blue',label='1')
-ax7.plot(temperatura_2_2,SAR_2_2,'.-',color='tab:orange',label='2')
-ax8.plot(temperatura_2_3,SAR_2_3,'.-',color='tab:green',label='3')
-
-ax0.set_ylabel('$\sin \Delta \phi$')
-ax0.set_title('$\sin (\Delta \phi)$',loc='left')
-ax3.set_ylabel('|c$_0$|')
-ax3.set_title('Magnitud 1° armónico',loc='left')
-ax6.set_title('SAR',loc='left')
-ax6.set_ylabel('SAR (W/g)')
-ax9.set_title('Tiempo de relajacion',loc='left')
-ax9.set_ylabel(r'$\tau$ (ns)')
-for a in [ax0,ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8,ax9,ax10,ax11]:
-    a.set_xlim(-4,4)
-    a.grid()
-    a.legend()
-
-for a in [ax6,ax7,ax8]:
-    a.set_xlabel('T (°C)')
-
-plt.suptitle(f'NE@citrico - {identif_2.split("_")[0]} kHz - {identif_2.split("_")[1]} kA/m',fontsize=16)
-plt.savefig('sinphi_mag_SAR_tau_vs_T_'+identif_2+'.png',dpi=300)
-plt.show()
-
-#%265 38
-fig,((ax0,ax1,ax2),(ax3,ax4,ax5),(ax9,ax10,ax11),(ax6,ax7,ax8))= plt.subplots(ncols=3,nrows=4,figsize=(13,12),constrained_layout=True,sharex='col',sharey='row')
-
-ax0.plot(temperatura_3_1,np.sin(dphi_fem_3_1),'.-',color='tab:blue',label='1')
-ax1.plot(temperatura_3_2,np.sin(dphi_fem_3_2),'.-',color='tab:orange',label='2')
-ax2.plot(temperatura_3_3,np.sin(dphi_fem_3_3),'.-',color='tab:green',label='3')
-
-ax3.plot(temperatura_3_1,magnitud_fund_3_1,'.-',color='tab:blue',label='1')
-ax4.plot(temperatura_3_2,magnitud_fund_3_2,'.-',color='tab:orange',label='2')
-ax5.plot(temperatura_3_3,magnitud_fund_3_3,'.-',color='tab:green',label='3')
-
-ax9.plot(temperatura_3_1,tau_3_1*1e9,'.-',color='tab:blue',label='1')
-ax10.plot(temperatura_3_2,tau_3_2*1e9,'.-',color='tab:orange',label='2')
-ax11.plot(temperatura_3_3,tau_3_3*1e9,'.-',color='tab:green',label='3')
-
-ax6.plot(temperatura_3_1,SAR_3_1,'.-',color='tab:blue',label='1')
-ax7.plot(temperatura_3_2,SAR_3_2,'.-',color='tab:orange',label='2')
-ax8.plot(temperatura_3_3,SAR_3_3,'.-',color='tab:green',label='3')
-
-ax0.set_ylabel('$\sin \Delta \phi$')
-ax0.set_title('$\sin (\Delta \phi)$',loc='left')
-ax3.set_ylabel('|c$_0$|')
-ax3.set_title('Magnitud 1° armónico',loc='left')
-ax6.set_title('SAR',loc='left')
-ax6.set_ylabel('SAR (W/g)')
-ax9.set_title('Tiempo de relajacion',loc='left')
-ax9.set_ylabel(r'$\tau$ (ns)')
-for a in [ax0,ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8,ax9,ax10,ax11]:
-    a.set_xlim(-4,4)
-    a.grid()
-    a.legend()
-
-for a in [ax6,ax7,ax8]:
-    a.set_xlabel('T (°C)')
-
-plt.suptitle(f'NE@citrico - {identif_3.split("_")[0]} kHz - {identif_3.split("_")[1]} kA/m',fontsize=16)
-plt.savefig('sinphi_mag_SAR_tau_vs_T_'+identif_3+'.png',dpi=300)
-plt.show()
-#% 265 57
-fig,((ax0,ax1,ax2),(ax3,ax4,ax5),(ax9,ax10,ax11),(ax6,ax7,ax8))= plt.subplots(ncols=3,nrows=4,figsize=(13,12),constrained_layout=True,sharex='col',sharey='row')
-
-ax0.plot(temperatura_4_1,np.sin(dphi_fem_4_1),'.-',color='tab:blue',label='1')
-ax1.plot(temperatura_4_2,np.sin(dphi_fem_4_2),'.-',color='tab:orange',label='2')
-ax2.plot(temperatura_4_3,np.sin(dphi_fem_4_3),'.-',color='tab:green',label='3')
-
-ax3.plot(temperatura_4_1,magnitud_fund_4_1,'.-',color='tab:blue',label='1')
-ax4.plot(temperatura_4_2,magnitud_fund_4_2,'.-',color='tab:orange',label='2')
-ax5.plot(temperatura_4_3,magnitud_fund_4_3,'.-',color='tab:green',label='3')
-
-ax9.plot(temperatura_4_1,tau_4_1*1e9,'.-',color='tab:blue',label='1')
-ax10.plot(temperatura_4_2,tau_4_2*1e9,'.-',color='tab:orange',label='2')
-ax11.plot(temperatura_4_3,tau_4_3*1e9,'.-',color='tab:green',label='3')
-
-ax6.plot(temperatura_4_1,SAR_4_1,'.-',color='tab:blue',label='1')
-ax7.plot(temperatura_4_2,SAR_4_2,'.-',color='tab:orange',label='2')
-ax8.plot(temperatura_4_3,SAR_4_3,'.-',color='tab:green',label='3')
-
-ax0.set_ylabel('$\sin \Delta \phi$')
-ax0.set_title('$\sin (\Delta \phi)$',loc='left')
-ax3.set_ylabel('|c$_0$|')
-ax3.set_title('Magnitud 1° armónico',loc='left')
-ax6.set_title('SAR',loc='left')
-ax6.set_ylabel('SAR (W/g)')
-ax9.set_title('Tiempo de relajacion',loc='left')
-ax9.set_ylabel(r'$\tau$ (ns)')
-for a in [ax0,ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8,ax9,ax10,ax11]:
-    a.set_xlim(-4,4)
-    a.grid()
-    a.legend()
-
-for a in [ax6,ax7,ax8]:
-    a.set_xlabel('T (°C)')
-
-plt.suptitle(f'NE@citrico - {identif_4.split("_")[0]} kHz - {identif_4.split("_")[1]} kA/m',fontsize=16)
-plt.savefig('sinphi_mag_SAR_tau_vs_T_'+identif_4+'.png',dpi=300)
-plt.show()
-
-#% 265 20
-fig,((ax0,ax1,ax2),(ax3,ax4,ax5),(ax9,ax10,ax11),(ax6,ax7,ax8))= plt.subplots(ncols=3,nrows=4,figsize=(13,12),constrained_layout=True,sharex='col',sharey='row')
-
-ax0.plot(temperatura_5_1,np.sin(dphi_fem_5_1),'.-',color='tab:blue',label='1')
-ax1.plot(temperatura_5_2,np.sin(dphi_fem_5_2),'.-',color='tab:orange',label='2')
-ax2.plot(temperatura_5_3,np.sin(dphi_fem_5_3),'.-',color='tab:green',label='3')
-
-ax3.plot(temperatura_5_1,magnitud_fund_5_1,'.-',color='tab:blue',label='1')
-ax4.plot(temperatura_5_2,magnitud_fund_5_2,'.-',color='tab:orange',label='2')
-ax5.plot(temperatura_5_3,magnitud_fund_5_3,'.-',color='tab:green',label='3')
-
-ax9.plot(temperatura_5_1,tau_5_1*1e9,'.-',color='tab:blue',label='1')
-ax10.plot(temperatura_5_2,tau_5_2*1e9,'.-',color='tab:orange',label='2')
-ax11.plot(temperatura_5_3,tau_5_3*1e9,'.-',color='tab:green',label='3')
-
-ax6.plot(temperatura_5_1,SAR_5_1,'.-',color='tab:blue',label='1')
-ax7.plot(temperatura_5_2,SAR_5_2,'.-',color='tab:orange',label='2')
-ax8.plot(temperatura_5_3,SAR_5_3,'.-',color='tab:green',label='3')
-
-ax0.set_ylabel('$\sin \Delta \phi$')
-ax0.set_title('$\sin (\Delta \phi)$',loc='left')
-ax3.set_ylabel('|c$_0$|')
-ax3.set_title('Magnitud 1° armónico',loc='left')
-ax6.set_title('SAR',loc='left')
-ax6.set_ylabel('SAR (W/g)')
-ax9.set_title('Tiempo de relajacion',loc='left')
-ax9.set_ylabel(r'$\tau$ (ns)')
-for a in [ax0,ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8,ax9,ax10,ax11]:
-    a.set_xlim(-4,4)
-    a.grid()
-    a.legend()
-
-for a in [ax6,ax7,ax8]:
-    a.set_xlabel('T (°C)')
-
-plt.suptitle(f'NE@citrico - {identif_5.split("_")[0]} kHz - {identif_5.split("_")[1]} kA/m',fontsize=16)
-plt.savefig('sinphi_mag_SAR_tau_vs_T_'+identif_5+'.png',dpi=300)
-plt.show()
-
-#%% Obtengo ciclos representativos
-#primero los del pico en la transicion de fase
-# print('max tau en TF:')
-# indx_max_1= np.nonzero(tau_1_1==max(tau_1_1))[0][0]
-# print(indx_max_1,files_1[indx_max_1],temperatura_1[indx_max_1])
-
-# indx_max_2= np.nonzero(tau_1_2==max(tau_1_2))[0][0]
-# print(indx_max_2,files_2[indx_max_2],temperatura_2[indx_max_2])
-
-# indx_max_3= np.nonzero(tau_1_3==max(tau_1_3))[0][0]
-# print(indx_max_3,files_3[indx_max_3],temperatura_3[indx_max_3])
-
-#%% PLOT ALL TAUS
-colors = [
-    ['#00ace6','#0099cc','#0086b3'  ],  # tonos de azul
-    ['#ff6600', '#e65c00', '#cc5200'],  # tonos de naranja
-    ['#00cc44', '#00b33c', '#009933'],  # tonos de verde
-    ['#ff0000', '#e60000', '#b30000'],  # tonos de rojo
-    ['#ff00ff', '#cc00cc', '#990099'],  # tonos purpura
-    ['#0059b3', '#004d99', '#004080'] # tonos azul oscuro
-]
-
-fig,(ax1,ax2)=plt.subplots(2,1,figsize=(14,8),sharex=True,constrained_layout=True)
-#Tau
-
-ax1.plot(temperatura_0_1, tau_0_1 * 1e9, 'o-', zorder=-1,label=identif_0, color=colors[0][0])
-ax1.plot(temperatura_0_2, tau_0_2 * 1e9, 'o-', zorder=0,label=identif_0, color=colors[0][1])
-ax1.plot(temperatura_0_3, tau_0_3 * 1e9, 'o-', zorder=1,label=identif_0, color=colors[0][2])
-
-ax1.plot(temperatura_1_1, tau_1_1 * 1e9, 's-', zorder=-1,label=identif_1, color=colors[1][0])
-ax1.plot(temperatura_1_2, tau_1_2 * 1e9, 's-', zorder=0,label=identif_1, color=colors[1][1])
-ax1.plot(temperatura_1_3, tau_1_3 * 1e9, 's-', zorder=1,label=identif_1, color=colors[1][2])
-
-ax1.plot(temperatura_2_1, tau_2_1 * 1e9, 'p-', zorder=-1,label=identif_2, color=colors[2][0])
-ax1.plot(temperatura_2_2, tau_2_2 * 1e9, 'p-', zorder=0,label=identif_2, color=colors[2][1])
-ax1.plot(temperatura_2_3, tau_2_3 * 1e9, 'p-', zorder=1,label=identif_2, color=colors[2][2])
-
-ax1.plot(temperatura_5_1, tau_5_1 * 1e9, 'v-', zorder=-1,label=identif_5, color=colors[3][0])
-ax1.plot(temperatura_5_2, tau_5_2 * 1e9, 'v-', zorder=0,label=identif_5, color=colors[3][1])
-ax1.plot(temperatura_5_3, tau_5_3 * 1e9, 'v-', zorder=1,label=identif_5, color=colors[3][2])
-
-ax1.plot(temperatura_3_1, tau_3_1 * 1e9, '^-', zorder=-1,label=identif_3, color=colors[4][0])
-ax1.plot(temperatura_3_2, tau_3_2 * 1e9, '^-', zorder=0,label=identif_3, color=colors[4][1])
-ax1.plot(temperatura_3_3, tau_3_3 * 1e9, '^-', zorder=1,label=identif_3, color=colors[4][2])
-
-ax1.plot(temperatura_4_1, tau_4_1 * 1e9, 'P-', zorder=-1,label=identif_4, color=colors[5][0])
-ax1.plot(temperatura_4_2, tau_4_2 * 1e9, 'P-', zorder=0,label=identif_4, color=colors[5][1])
-ax1.plot(temperatura_4_3, tau_4_3 * 1e9, 'P-', zorder=1,label=identif_4, color=colors[5][2])
-
-#SAR
-
-ax2.plot(temperatura_0_1, SAR_0_1, 'o-', zorder=1,label=identif_0, color=colors[0][0])
-ax2.plot(temperatura_0_2, SAR_0_2, 'o-', zorder=2,label=identif_0, color=colors[0][1])
-ax2.plot(temperatura_0_3, SAR_0_3, 'o-', zorder=3,label=identif_0, color=colors[0][2])
-
-ax2.plot(temperatura_1_1, SAR_1_1, 's-', zorder=1,label=identif_1, color=colors[1][0])
-ax2.plot(temperatura_1_2, SAR_1_2, 's-', zorder=2,label=identif_1, color=colors[1][1])
-ax2.plot(temperatura_1_3, SAR_1_3, 's-', zorder=3,label=identif_1, color=colors[1][2])
-
-ax2.plot(temperatura_2_1, SAR_2_1, 'v-', zorder=1,label=identif_2, color=colors[2][0])
-ax2.plot(temperatura_2_2, SAR_2_2, 'v-', zorder=2,label=identif_2, color=colors[2][1])
-ax2.plot(temperatura_2_3, SAR_2_3, 'v-', zorder=3,label=identif_2, color=colors[2][2])
-
-ax2.plot(temperatura_5_1, SAR_5_1, 'p-', zorder=1,label=identif_5, color=colors[3][0])
-ax2.plot(temperatura_5_2, SAR_5_2, 'p-', zorder=2,label=identif_5, color=colors[3][1])
-ax2.plot(temperatura_5_3, SAR_5_3, 'p-', zorder=3,label=identif_5, color=colors[3][2])
-
-ax2.plot(temperatura_3_1, SAR_3_1, '^-', zorder=1,label=identif_3, color=colors[4][0])
-ax2.plot(temperatura_3_2, SAR_3_2, '^-', zorder=2,label=identif_3, color=colors[4][1])
-ax2.plot(temperatura_3_3, SAR_3_3, '^-', zorder=3,label=identif_3, color=colors[4][2])
-
-ax2.plot(temperatura_4_1, SAR_4_1, 'P-', zorder=1,label=identif_4, color=colors[5][0])
-ax2.plot(temperatura_4_2, SAR_4_2, 'P-', zorder=2,label=identif_4, color=colors[5][1])
-ax2.plot(temperatura_4_3, SAR_4_3, 'P-', zorder=3,label=identif_4, color=colors[5][2])
-
-ax2.set_xticks(np.arange(-50,30,5))
-
-# ax1.axhline(tau1.nominal_value,0,1,c='tab:red',label=f'{tau1} ns')
-# ax1.axhspan(tau1.nominal_value-tau1.std_dev,tau1.nominal_value+tau1.std_dev,alpha=0.5,color='tab:red')
-ax1.set_ylabel(r'$\tau$ (ns)')  
-ax2.set_ylabel('SAR (W/g)')
-
-ax1.set_title('Tiempo de relajación',loc='left')
-ax2.set_title('SAR',loc='left')
-ax2.set_xlabel('T (°C)')
-plt.suptitle('NE@citrico 5X - congelado c/Campo Perpendicular',fontsize=15)
-for ax in [ax1,ax2]:
-    #ax.set_ylabel(r'$\tau$ (ns)')
-    ax.legend(ncol=6)
-    ax.grid(zorder=0)
-
-plt.savefig('tau_SAR_vs_T__all_cong_c_campo_P.png',dpi=300)
+
+#%% TEMPLOG
+from datetime import datetime
+
+def lector_templog(directorio, plot=False):
+    '''
+    Busca archivo *templog.csv en directorio especificado.
+    muestras = False plotea solo T(dt). 
+    muestras = True plotea T(dt) con las muestras superpuestas
+    Retorna arrys timestamp,temperatura y plotea el log completo 
+    '''
+    if fnmatch.filter(os.listdir(directorio),'*templog*'):
+        dir_templog = os.path.join(directorio,fnmatch.filter(os.listdir(directorio),'*templog*')[0])#toma el 1ero en orden alfabetico
+        data = pd.read_csv(dir_templog,sep=';',header=5,
+                            names=('Timestamp','T_CH1','T_CH2'),usecols=(0,1,2),
+                            decimal=',',engine='python') 
+        
+        temp_CH1 = pd.Series(data['T_CH1']).to_numpy(dtype=float)
+        temp_CH2= pd.Series(data['T_CH2']).to_numpy(dtype=float)
+        timestamp=np.array([datetime.strptime(date,'%Y/%m/%d %H:%M:%S') for date in data['Timestamp']]) 
+        if plot:
+            pass
+            # fig, ax = plt.subplots(figsize=(10,5))
+            # ax.plot(timestamp,temp_CH1,'.-',label=dir_templog.split('_')[-1]+' CH1' )
+            # ax.plot(timestamp,temp_CH2,'.-',label=dir_templog.split('_')[-1]+ ' CH2')
+            # ax.plot(timestamp,np.abs(temp_CH1-temp_CH2),'.-',label=rf'$\Delta$ max = {max(np.abs(temp_CH1-temp_CH2)):.1f} °C')
+            # plt.grid()
+            # plt.ylabel('Temperatura (ºC)')
+            # fig.autofmt_xdate()
+            # plt.legend(loc='best')  
+            # plt.tight_layout()
+            # plt.xlim(timestamp[0],timestamp[-1])
+            # plt.show()
+        else:
+            pass
+        return timestamp,temp_CH1, temp_CH2
+    else:
+        print('No se encuentra archivo templog.csv en el directorio:',directorio)
+#%%
+# #%% 135 05
+# identif_0='135_20'
+# dir_0 = os.path.join(os.getcwd(),identif_0)
+# archivos_resultados = [f for f in os.listdir(dir_0) if  fnmatch.fnmatch(f, '*resultados*')]
+# archivos_resultados.sort()
+# filepaths = [os.path.join(dir_0,f) for f in archivos_resultados]
+# meta_1,files_1,time_1,temperatura_0_1,Mr_1,Hc_1,campo_max_1,mag_max_1,xi_M_0_1,frecuencia_fund_1,magnitud_fund_0_1,dphi_fem_0_1,SAR_0_1,tau_0_1,N1 = lector_resultados(filepaths[0])
+# meta_2,files_2,time_2,temperatura_0_2,Mr_2,Hc_2,campo_max_2,mag_max_2,xi_M_0_2,frecuencia_fund_2,magnitud_fund_0_2,dphi_fem_0_2,SAR_0_2,tau_0_2,N2 = lector_resultados(filepaths[1])
+# meta_3,files_3,time_3,temperatura_0_3,Mr_3,Hc_3,campo_max_3,mag_max_3,xi_M_0_3,frecuencia_fund_3,magnitud_fund_0_3,dphi_fem_0_3,SAR_0_3,tau_0_3,N3 = lector_resultados(filepaths[2])
+
+# taus_0=np.array([ufloat(np.mean(tau_0_1),np.std(tau_0_1)),ufloat(np.mean(tau_0_2),np.std(tau_0_2)),ufloat(np.mean(tau_0_3),np.std(tau_0_3))])*1e9
+# SARs_0=np.array([ufloat(np.mean(SAR_0_1),np.std(SAR_0_1)),ufloat(np.mean(SAR_0_2),np.std(SAR_0_2)),ufloat(np.mean(SAR_0_3),np.std(SAR_0_3))])
+
+# for i,ar in enumerate(archivos_resultados):
+#     print('File:',ar,f'- tau: {taus_0[i]:.2f} ns',f'- SAR: {SARs_0[i]:.1f} W/g')
+# ufloat(np.mean([t.nominal_value for t in taus_0]),np.std([t.nominal_value for t in taus_0]))
+
+# print(f'\nPromedio de las {len(taus_0)} medidas:')
+# tau0 = np.mean(unumpy.uarray([np.mean(tau_0_1),np.mean(tau_0_2),np.mean(tau_0_3)],[np.std(tau_0_1),np.std(tau_0_2),np.std(tau_0_3)]))*1e9
+# print(f' tau = {tau0} ns')
+# SAR0 = ufloat(np.mean([S.nominal_value for S in SARs_0]),np.std([S.nominal_value for S in SARs_0]))
+# print(f' SAR = {SAR0:.2uf} W/g')
+
+# fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+# ax.plot(temperatura_0_1,tau_0_1,'.-',label='1')
+# ax.plot(temperatura_0_2,tau_0_2,'.-',label='2')
+# ax.plot(temperatura_0_3,tau_0_3,'.-',label='3')
+# ax.text(0.95,0.1,rf'<$\tau$> = {tau0:.1uf} ns',bbox=dict(alpha=0.8),transform=ax.transAxes,ha='right', va='bottom')
+# plt.legend()
+# plt.grid()
+# plt.ylabel(r'$\tau$ (s)')
+# plt.xlabel('T (°C)')
+# plt.title(r'$\tau$ - '+ identif_0)
+# plt.savefig('tau_vs_T_'+identif_0+'.png',dpi=300)
+# plt.show()
+
+# archivos_ciclos_0 = [f for f in os.listdir(dir_0) if  fnmatch.fnmatch(f, '*promedio*')]
+# archivos_ciclos_0.sort()
+# filepaths_0 = [os.path.join(dir_0,f) for f in archivos_ciclos_0]
+# for ac in archivos_ciclos_0:
+#     print(ac)
+
+# fig1,ax1=plt.subplots(figsize=(8,6),constrained_layout=True)
+
+# for i,fp in enumerate(filepaths_0):
+#     t,H,M,metadata=lector_ciclos(fp)
+#     ax1.plot(H,M,label=f'{SARs_0[i]:1f} W/g')
+
+# ax1.text(0.95,0.1,f'<SAR> = {SAR0:.2uf} W/g',bbox=dict(alpha=0.8),transform=ax1.transAxes,ha='right', va='bottom')
+# ax1.set_ylabel('M (A/m)')
+# ax1.set_xlabel('H (A/m)')
+# ax1.legend()
+# ax1.grid()
+# plt.title('Ciclos promedio - '+identif_0)
+# plt.savefig('ciclos_promedio_'+identif_0+'.png',dpi=300)
+# plt.show()
+
+# #%% 135 10 
+# identif_1='135_38'
+# dir_1 = os.path.join(os.getcwd(),identif_1)
+# archivos_resultados = [f for f in os.listdir(dir_1) if  fnmatch.fnmatch(f, '*resultados*')]
+# archivos_resultados.sort()
+# filepaths = [os.path.join(dir_1,f) for f in archivos_resultados]
+# meta_1,files_1,time_1,temperatura_1_1,Mr_1,Hc_1,campo_max_1,mag_max_1,xi_M_0_1,frecuencia_fund_1,magnitud_fund_1_1,dphi_fem_1_1,SAR_1_1,tau_1_1,N1 = lector_resultados(filepaths[0])
+# meta_2,files_2,time_2,temperatura_1_2,Mr_2,Hc_2,campo_max_2,mag_max_2,xi_M_0_2,frecuencia_fund_2,magnitud_fund_1_2,dphi_fem_1_2,SAR_1_2,tau_1_2,N2 = lector_resultados(filepaths[1])
+# meta_3,files_3,time_3,temperatura_1_3,Mr_3,Hc_3,campo_max_3,mag_max_3,xi_M_0_3,frecuencia_fund_3,magnitud_fund_1_3,dphi_fem_1_3,SAR_1_3,tau_1_3,N3 = lector_resultados(filepaths[2])
+
+# taus_1=np.array([ufloat(np.mean(tau_1_1),np.std(tau_1_1)),ufloat(np.mean(tau_1_2),np.std(tau_1_2)),ufloat(np.mean(tau_1_3),np.std(tau_1_3))])*1e9
+# SARs_1=np.array([ufloat(np.mean(SAR_1_1),np.std(SAR_1_1)),ufloat(np.mean(SAR_1_2),np.std(SAR_1_2)),ufloat(np.mean(SAR_1_3),np.std(SAR_1_3))])
+
+# for i,ar in enumerate(archivos_resultados):
+#     print('File:',ar,f'- tau: {taus_1[i]:.2f} ns',f'- SAR: {SARs_1[i]:.1f} W/g')
+# ufloat(np.mean([t.nominal_value for t in taus_1]),np.std([t.nominal_value for t in taus_1]))
+
+# print(f'\nPromedio de las {len(taus_1)} medidas:')
+# tau1 = np.mean(unumpy.uarray([np.mean(tau_1_1),np.mean(tau_1_2),np.mean(tau_1_3)],[np.std(tau_1_1),np.std(tau_1_2),np.std(tau_1_3)]))*1e9
+# print(f' tau = {tau1} ns')
+# SAR1 = ufloat(np.mean([S.nominal_value for S in SARs_1]),np.std([S.nominal_value for S in SARs_1]))
+# print(f' SAR = {SAR1:.2uf} W/g')
+
+# fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+# ax.plot(temperatura_1_1,tau_1_1,'.-',label='1')
+# ax.plot(temperatura_1_2,tau_1_2,'.-',label='2')
+# ax.plot(temperatura_1_3,tau_1_3,'.-',label='3')
+# ax.text(0.95,0.1,rf'<$\tau$> = {tau1:.1uf} ns',bbox=dict(alpha=0.8),transform=ax.transAxes,ha='right', va='bottom')
+# plt.legend()
+# plt.grid()
+# plt.ylabel(r'$\tau$ (s)')
+# plt.xlabel('T (°C)')
+# plt.title(r'$\tau$ - '+ identif_1)
+# plt.savefig('tau_vs_T_'+identif_1+'.png',dpi=300)
+# plt.show()
+
+# archivos_ciclos_1 = [f for f in os.listdir(dir_1) if  fnmatch.fnmatch(f, '*promedio*')]
+# archivos_ciclos_1.sort()
+# filepaths_1 = [os.path.join(dir_1,f) for f in archivos_ciclos_1]
+# for ac in archivos_ciclos_1:
+#     print(ac)
+
+# fig1,ax1=plt.subplots(figsize=(8,6),constrained_layout=True)
+
+# for i,fp in enumerate(filepaths_1):
+#     t,H,M,metadata=lector_ciclos(fp)
+#     ax1.plot(H,M,label=f'{SARs_1[i]:1f} W/g')
+
+# ax1.text(0.95,0.1,f'<SAR> = {SAR1:.2uf} W/g',bbox=dict(alpha=0.8),transform=ax1.transAxes,ha='right', va='bottom')
+# ax1.set_ylabel('M (A/m)')
+# ax1.set_xlabel('H (A/m)')
+# ax1.legend()
+# ax1.grid()
+# plt.title('Ciclos promedio - '+identif_1)
+# plt.savefig('ciclos_promedio_'+identif_1+'.png',dpi=300)
+# plt.show()
+# #%% 135 15 
+# identif_2='135_57'
+# dir_2 = os.path.join(os.getcwd(),identif_2)
+# archivos_resultados = [f for f in os.listdir(dir_2) if  fnmatch.fnmatch(f, '*resultados*')]
+# archivos_resultados.sort()
+# filepaths = [os.path.join(dir_2,f) for f in archivos_resultados]
+# meta_1,files_1,time_1,temperatura_2_1,Mr_1,Hc_1,campo_max_1,mag_max_1,xi_M_0_1,frecuencia_fund_1,magnitud_fund_2_1,dphi_fem_2_1,SAR_2_1,tau_2_1,N1 = lector_resultados(filepaths[0])
+# meta_2,files_2,time_2,temperatura_2_2,Mr_2,Hc_2,campo_max_2,mag_max_2,xi_M_0_2,frecuencia_fund_2,magnitud_fund_2_2,dphi_fem_2_2,SAR_2_2,tau_2_2,N2 = lector_resultados(filepaths[1])
+# meta_3,files_3,time_3,temperatura_2_3,Mr_3,Hc_3,campo_max_3,mag_max_3,xi_M_0_3,frecuencia_fund_3,magnitud_fund_2_3,dphi_fem_2_3,SAR_2_3,tau_2_3,N3 = lector_resultados(filepaths[2])
+
+# taus_2=np.array([ufloat(np.mean(tau_2_1),np.std(tau_2_1)),ufloat(np.mean(tau_2_2),np.std(tau_2_2)),ufloat(np.mean(tau_2_3),np.std(tau_2_3))])*1e9
+# SARs_2=np.array([ufloat(np.mean(SAR_2_1),np.std(SAR_2_1)),ufloat(np.mean(SAR_2_2),np.std(SAR_2_2)),ufloat(np.mean(SAR_2_3),np.std(SAR_2_3))])
+
+# for i,ar in enumerate(archivos_resultados):
+#     print('File:',ar,f'- tau: {taus_2[i]:.2f} ns',f'- SAR: {SARs_2[i]:.1f} W/g')
+# ufloat(np.mean([t.nominal_value for t in taus_2]),np.std([t.nominal_value for t in taus_2]))
+
+# print(f'\nPromedio de las {len(taus_2)} medidas:')
+# tau2 = np.mean(unumpy.uarray([np.mean(tau_2_1),np.mean(tau_2_2),np.mean(tau_2_3)],[np.std(tau_2_1),np.std(tau_2_2),np.std(tau_2_3)]))*1e9
+# print(f' tau = {tau2} ns')
+# SAR2 = ufloat(np.mean([S.nominal_value for S in SARs_2]),np.std([S.nominal_value for S in SARs_2]))
+# print(f' SAR = {SAR2:.2uf} W/g')
+
+# fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+# ax.plot(temperatura_2_1,tau_2_1,'.-',label='1')
+# ax.plot(temperatura_2_2,tau_2_2,'.-',label='2')
+# ax.plot(temperatura_2_3,tau_2_3,'.-',label='3')
+# ax.text(0.95,0.1,rf'<$\tau$> = {tau1:.1uf} ns',bbox=dict(alpha=0.8),transform=ax.transAxes,ha='right', va='bottom')
+# plt.legend()
+# plt.grid()
+# plt.ylabel(r'$\tau$ (s)')
+# plt.xlabel('T (°C)')
+# plt.title(r'$\tau$ - '+ identif_2)
+# plt.savefig('tau_vs_T_'+identif_2+'.png',dpi=300)
+# plt.show()
+
+# archivos_ciclos_2 = [f for f in os.listdir(dir_2) if  fnmatch.fnmatch(f, '*promedio*')]
+# archivos_ciclos_2.sort()
+# filepaths_2 = [os.path.join(dir_2,f) for f in archivos_ciclos_2]
+# for ac in archivos_ciclos_2:
+#     print(ac)
+
+# fig1,ax1=plt.subplots(figsize=(8,6),constrained_layout=True)
+
+# for i,fp in enumerate(filepaths_2):
+#     t,H,M,metadata=lector_ciclos(fp)
+#     ax1.plot(H,M,label=f'{SARs_2[i]:1f} W/g')
+
+# ax1.text(0.95,0.1,f'<SAR> = {SAR2:.2uf} W/g',bbox=dict(alpha=0.8),transform=ax1.transAxes,ha='right', va='bottom')
+# ax1.set_ylabel('M (A/m)')
+# ax1.set_xlabel('H (A/m)')
+# ax1.legend()
+# ax1.grid()
+# plt.title('Ciclos promedio - '+identif_2)
+# plt.savefig('ciclos_promedio_'+identif_2+'.png',dpi=300)
+# plt.show()
+# #%% 265 20
+# identif_5='265_20'
+# dir_5 = os.path.join(os.getcwd(),identif_5)
+# archivos_resultados = [f for f in os.listdir(dir_5) if  fnmatch.fnmatch(f, '*resultados*')]
+# archivos_resultados.sort()
+# filepaths = [os.path.join(dir_5,f) for f in archivos_resultados]
+# meta_1,files_1,time_1,temperatura_5_1,Mr_1,Hc_1,campo_max_1,mag_max_1,xi_M_5_1,frecuencia_fund_1,magnitud_fund_5_1,dphi_fem_5_1,SAR_5_1,tau_5_1,N1 = lector_resultados(filepaths[0])
+# meta_2,files_2,time_2,temperatura_5_2,Mr_2,Hc_2,campo_max_2,mag_max_2,xi_M_5_2,frecuencia_fund_2,magnitud_fund_5_2,dphi_fem_5_2,SAR_5_2,tau_5_2,N2 = lector_resultados(filepaths[1])
+# meta_3,files_3,time_3,temperatura_5_3,Mr_3,Hc_3,campo_max_3,mag_max_3,xi_M_5_3,frecuencia_fund_3,magnitud_fund_5_3,dphi_fem_5_3,SAR_5_3,tau_5_3,N3 = lector_resultados(filepaths[2])
+
+# taus_5=np.array([ufloat(np.mean(tau_5_1),np.std(tau_5_1)),ufloat(np.mean(tau_5_2),np.std(tau_5_2)),ufloat(np.mean(tau_5_3),np.std(tau_5_3))])*1e9
+# SARs_5=np.array([ufloat(np.mean(SAR_5_1),np.std(SAR_5_1)),ufloat(np.mean(SAR_5_2),np.std(SAR_5_2)),ufloat(np.mean(SAR_5_3),np.std(SAR_5_3))])
+
+# for i,ar in enumerate(archivos_resultados):
+#     print('File:',ar,f'- tau: {taus_5[i]:.2f} ns',f'- SAR: {SARs_5[i]:.1f} W/g')
+# ufloat(np.mean([t.nominal_value for t in taus_5]),np.std([t.nominal_value for t in taus_5]))
+
+# print(f'\nPromedio de las {len(taus_5)} medidas:')
+# tau0 = np.mean(unumpy.uarray([np.mean(tau_5_1),np.mean(tau_5_2),np.mean(tau_5_3)],[np.std(tau_5_1),np.std(tau_5_2),np.std(tau_5_3)]))*1e9
+# print(f' tau = {tau0} ns')
+# SAR0 = ufloat(np.mean([S.nominal_value for S in SARs_5]),np.std([S.nominal_value for S in SARs_5]))
+# print(f' SAR = {SAR0:.2uf} W/g')
+
+# fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+# ax.plot(temperatura_5_1,tau_5_1,'.-',label='1')
+# ax.plot(temperatura_5_2,tau_5_2,'.-',label='2')
+# ax.plot(temperatura_5_3,tau_5_3,'.-',label='3')
+# ax.text(0.95,0.1,rf'<$\tau$> = {tau1:.1uf} ns',bbox=dict(alpha=0.8),transform=ax.transAxes,ha='right', va='bottom')
+# plt.legend()
+# plt.grid()
+# plt.ylabel(r'$\tau$ (s)')
+# plt.xlabel('T (°C)')
+# plt.title(r'$\tau$ - '+ identif_5)
+# plt.savefig('tau_vs_T_'+identif_5+'.png',dpi=300)
+# plt.show()
+
+# archivos_ciclos_5 = [f for f in os.listdir(dir_5) if  fnmatch.fnmatch(f, '*promedio*')]
+# archivos_ciclos_5.sort()
+# filepaths_5 = [os.path.join(dir_5,f) for f in archivos_ciclos_5]
+# for ac in archivos_ciclos_5:
+#     print(ac)
+
+# fig1,ax1=plt.subplots(figsize=(8,6),constrained_layout=True)
+
+# for i,fp in enumerate(filepaths_5):
+#     t,H,M,metadata=lector_ciclos(fp)
+#     ax1.plot(H,M,label=f'{SARs_5[i]:1f} W/g')
+
+# ax1.text(0.95,0.1,f'<SAR> = {SAR0:.2uf} W/g',bbox=dict(alpha=0.8),transform=ax1.transAxes,ha='right', va='bottom')
+# ax1.set_ylabel('M (A/m)')
+# ax1.set_xlabel('H (A/m)')
+# ax1.legend()
+# ax1.grid()
+# plt.title('Ciclos promedio - '+identif_5)
+# plt.savefig('ciclos_promedio_'+identif_5+'.png',dpi=300)
+# plt.show()
+
+
+
+# #%% 265 38 
+# identif_3='265_38'
+# dir_3 = os.path.join(os.getcwd(),identif_3)
+# archivos_resultados_3 = [f for f in os.listdir(dir_3) if  fnmatch.fnmatch(f, '*resultados*')]
+# archivos_resultados_3.sort()
+# filepaths = [os.path.join(dir_3,f) for f in archivos_resultados_3]
+
+# meta_1,files_1,time_1,temperatura_3_1,Mr_1,Hc_1,campo_max_1,mag_max_1,xi_M_0_1,frecuencia_fund_3_1,magnitud_fund_3_1,dphi_fem_3_1,SAR_3_1,tau_3_1,N1 = lector_resultados(filepaths[0])
+# meta_2,files_2,time_2,temperatura_3_2,Mr_2,Hc_2,campo_max_2,mag_max_2,xi_M_0_2,frecuencia_fund_3_2,magnitud_fund_3_2,dphi_fem_3_2,SAR_3_2,tau_3_2,N2 = lector_resultados(filepaths[1])
+# meta_3,files_3,time_3,temperatura_3_3,Mr_3,Hc_3,campo_max_3,mag_max_3,xi_M_0_3,frecuencia_fund_3_3,magnitud_fund_3_3,dphi_fem_3_3,SAR_3_3,tau_3_3,N3 = lector_resultados(filepaths[2])
+
+# taus_3=np.array([ufloat(np.mean(tau_3_1),np.std(tau_3_1)),ufloat(np.mean(tau_3_2),np.std(tau_3_2)),ufloat(np.mean(tau_3_3),np.std(tau_3_3))])*1e9
+# SARs_3=np.array([ufloat(np.mean(SAR_3_1),np.std(SAR_3_1)),ufloat(np.mean(SAR_3_2),np.std(SAR_3_2)),ufloat(np.mean(SAR_3_3),np.std(SAR_3_3))])
+
+# for i,ar in enumerate(archivos_resultados):
+#     print('File:',ar,f'- tau: {taus_3[i]:.2f} ns',f'- SAR: {SARs_3[i]:.1f} W/g')
+# ufloat(np.mean([t.nominal_value for t in taus_3]),np.std([t.nominal_value for t in taus_3]))
+
+# print(f'\nPromedio de las {len(taus_3)} medidas:')
+# tau3 = np.mean(unumpy.uarray([np.mean(tau_3_1),np.mean(tau_3_2),np.mean(tau_3_3)],[np.std(tau_3_1),np.std(tau_3_2),np.std(tau_3_3)]))*1e9
+# print(f' tau = {tau3} ns')
+# SAR3 = ufloat(np.mean([S.nominal_value for S in SARs_3]),np.std([S.nominal_value for S in SARs_3]))
+# print(f' SAR = {SAR3:.2uf} W/g')
+
+# fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+# ax.plot(temperatura_3_1,tau_3_1,'.-',label='1')
+# ax.plot(temperatura_3_2,tau_3_2,'.-',label='2')
+# ax.plot(temperatura_3_3,tau_3_3,'.-',label='3')
+# ax.text(0.95,0.1,rf'<$\tau$> = {tau3:.1uf} ns',bbox=dict(alpha=0.8),transform=ax.transAxes,ha='right', va='bottom')
+# plt.legend()
+# plt.grid()
+# plt.ylabel(r'$\tau$ (s)')
+# plt.xlabel('Indx')
+# plt.title(identif_3)
+# plt.savefig('tau_vs_T_'+identif_3+'.png',dpi=300)
+# plt.show()
+# #CICLOS
+# archivos_ciclos_3 = [f for f in os.listdir(dir_3) if  fnmatch.fnmatch(f, '*promedio*')]
+# archivos_ciclos_3.sort()
+# filepaths_3 = [os.path.join(dir_3,f) for f in archivos_ciclos_3]
+# for ac in archivos_ciclos_3:
+#     print(ac)
+
+# fig2,ax2=plt.subplots(figsize=(8,6),constrained_layout=True)
+# for i,fp in enumerate(filepaths_3):
+#     t,H,M,metadata=lector_ciclos(fp)
+#     ax2.plot(H,M,label=f'{SARs_3[i]:1f} W/g')
+# ax2.text(0.95,0.1,f'<SAR> = {SAR3:.2uf} W/g',bbox=dict(alpha=0.8),transform=ax2.transAxes,ha='right', va='bottom')
+
+# ax2.set_ylabel('M (A/m)')
+# ax2.set_xlabel('H (A/m)')
+# ax2.legend()
+# ax2.grid()
+# plt.title('Ciclos promedio - '+identif_3)
+# plt.savefig('ciclos_promedio_'+identif_3+'.png',dpi=300)
+# plt.show()
+# #%% 265 15
+# identif_4='265_57'
+# dir_4 = os.path.join(os.getcwd(),identif_4)
+# archivos_resultados = [f for f in os.listdir(dir_4) if  fnmatch.fnmatch(f, '*resultados*')]
+# archivos_resultados.sort()
+# filepaths = [os.path.join(dir_4,f) for f in archivos_resultados]
+
+# meta_1,files_1,time_1,temperatura_4_1,Mr_1,Hc_1,campo_max_1,mag_max_1,xi_M_0_1,frecuencia_fund_4_1,magnitud_fund_4_1,dphi_fem_4_1,SAR_4_1,tau_4_1,N1 = lector_resultados(filepaths[0])
+# meta_2,files_2,time_2,temperatura_4_2,Mr_2,Hc_2,campo_max_2,mag_max_2,xi_M_0_2,frecuencia_fund_4_2,magnitud_fund_4_2,dphi_fem_4_2,SAR_4_2,tau_4_2,N2 = lector_resultados(filepaths[1])
+# meta_3,files_3,time_3,temperatura_4_3,Mr_3,Hc_3,campo_max_3,mag_max_3,xi_M_0_3,frecuencia_fund_4_3,magnitud_fund_4_3,dphi_fem_4_3,SAR_4_3,tau_4_3,N3 = lector_resultados(filepaths[2])
+
+# taus_4=np.array([ufloat(np.mean(tau_4_1),np.std(tau_4_1)),ufloat(np.mean(tau_4_2),np.std(tau_4_2)),ufloat(np.mean(tau_4_3),np.std(tau_4_3))])*1e9
+# SARs_4=np.array([ufloat(np.mean(SAR_4_1),np.std(SAR_4_1)),ufloat(np.mean(SAR_4_2),np.std(SAR_4_2)),ufloat(np.mean(SAR_4_3),np.std(SAR_4_3))])
+
+# for i,ar in enumerate(archivos_resultados):
+#     print('File:',ar,f'- tau: {taus_4[i]:.2f} ns',f'- SAR: {SARs_4[i]:.1f} W/g')
+# ufloat(np.mean([t.nominal_value for t in taus_4]),np.std([t.nominal_value for t in taus_4]))
+
+# print(f'\nPromedio de las {len(taus_4)} medidas:')
+# tau4 = np.mean(unumpy.uarray([np.mean(tau_4_1),np.mean(tau_4_2),np.mean(tau_4_3)],[np.std(tau_4_1),np.std(tau_4_2),np.std(tau_4_3)]))*1e9
+# print(f' tau = {tau4} ns')
+# SAR4 = ufloat(np.mean([S.nominal_value for S in SARs_4]),np.std([S.nominal_value for S in SARs_4]))
+# print(f' SAR = {SAR4:.2uf} W/g')
+
+# fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
+# ax.plot(temperatura_4_1,tau_4_1,'.-',label='1')
+# ax.plot(temperatura_4_2,tau_4_2,'.-',label='2')
+# ax.plot(temperatura_4_3,tau_4_3,'.-',label='3')
+# ax.text(0.95,0.1,rf'<$\tau$> = {tau4:.1uf} ns',bbox=dict(alpha=0.8),transform=ax.transAxes,ha='right', va='bottom')
+# plt.legend()
+# plt.grid()
+# plt.ylabel(r'$\tau$ (s)')
+# plt.xlabel('Indx')
+# plt.title(identif_4)
+# plt.savefig('tau_vs_T_'+identif_4+'.png',dpi=300)
+# plt.show()
+# #%CICLOS
+# archivos_ciclos_4 = [f for f in os.listdir(dir_4) if  fnmatch.fnmatch(f, '*promedio*')]
+# archivos_ciclos_4.sort()
+# filepaths_4 = [os.path.join(dir_4,f) for f in archivos_ciclos_4]
+# for ac in archivos_ciclos_4:
+#     print(ac)
+
+# fig2,ax2=plt.subplots(figsize=(8,6),constrained_layout=True)
+# for i,fp in enumerate(filepaths_4):
+#     t,H,M,metadata=lector_ciclos(fp)
+#     ax2.plot(H,M,label=f'{SARs_4[i]:1f} W/g')
+# ax2.text(0.95,0.1,f'<SAR> = {SAR4:.2uf} W/g',bbox=dict(alpha=0.8),transform=ax2.transAxes,ha='right', va='bottom')
+# ax2.set_ylabel('M (A/m)')
+# ax2.set_xlabel('H (A/m)')
+# ax2.legend()
+# ax2.grid()
+# plt.title('Ciclos promedio - '+identif_4)
+# plt.savefig('ciclos_promedio_'+identif_4+'.png',dpi=300)
+# plt.show()
+
+
+# #%% PLOTEO PARAMETROS alrededor de la Transicion de Fase
+# # 135 20
+# fig,((ax0,ax1,ax2),(ax3,ax4,ax5),(ax9,ax10,ax11),(ax6,ax7,ax8))= plt.subplots(ncols=3,nrows=4,figsize=(13,12),constrained_layout=True,sharex='col',sharey='row')
+# ax0.plot(temperatura_0_1,np.sin(dphi_fem_0_1),'.-',color='tab:blue',label='1')
+# ax1.plot(temperatura_0_2,np.sin(dphi_fem_0_2),'.-',color='tab:orange',label='2')
+# ax2.plot(temperatura_0_3,np.sin(dphi_fem_0_3),'.-',color='tab:green',label='3')
+
+# ax3.plot(temperatura_0_1,magnitud_fund_0_1,'.-',color='tab:blue',label='1')
+# ax4.plot(temperatura_0_2,magnitud_fund_0_2,'.-',color='tab:orange',label='2')
+# ax5.plot(temperatura_0_3,magnitud_fund_0_3,'.-',color='tab:green',label='3')
+
+# ax9.plot(temperatura_0_1,tau_0_1*1e9,'.-',color='tab:blue',label='1')
+# ax10.plot(temperatura_0_2,tau_0_2*1e9,'.-',color='tab:orange',label='2')
+# ax11.plot(temperatura_0_3,tau_0_3*1e9,'.-',color='tab:green',label='3')
+
+# ax6.plot(temperatura_0_1,SAR_0_1,'.-',color='tab:blue',label='1')
+# ax7.plot(temperatura_0_2,SAR_0_2,'.-',color='tab:orange',label='2')
+# ax8.plot(temperatura_0_3,SAR_0_3,'.-',color='tab:green',label='3')
+
+# ax0.set_ylabel('$\sin \Delta \phi$')
+# ax0.set_title('$\sin (\Delta \phi)$',loc='left')
+# ax3.set_ylabel('|c$_0$|')
+# ax3.set_title('Magnitud 1° armónico',loc='left')
+# ax6.set_title('SAR',loc='left')
+# ax6.set_ylabel('SAR (W/g)')
+# ax9.set_title('Tiempo de relajacion',loc='left')
+# ax9.set_ylabel(r'$\tau$ (ns)')
+# for a in [ax0,ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8,ax9,ax10,ax11]:
+#     a.set_xlim(-4,4)
+#     a.grid()
+#     a.legend()
+
+# for a in [ax6,ax7,ax8]:
+#     a.set_xlabel('T (°C)')
+
+# plt.suptitle(f'NE@citrico - {identif_0.split("_")[0]} kHz - {identif_0.split("_")[1]} kA/m',fontsize=16)
+# plt.savefig('sinphi_mag_SAR_tau_vs_T_'+identif_0+'.png',dpi=300)
+# plt.show()#%%
+
+# # 135 38
+# fig,((ax0,ax1,ax2),(ax3,ax4,ax5),(ax9,ax10,ax11),(ax6,ax7,ax8))= plt.subplots(ncols=3,nrows=4,figsize=(13,12),constrained_layout=True,sharex='col',sharey='row')
+# ax0.plot(temperatura_1_1,np.sin(dphi_fem_1_1),'.-',color='tab:blue',label='1')
+# ax1.plot(temperatura_1_2,np.sin(dphi_fem_1_2),'.-',color='tab:orange',label='2')
+# ax2.plot(temperatura_1_3,np.sin(dphi_fem_1_3),'.-',color='tab:green',label='3')
+
+# ax3.plot(temperatura_1_1,magnitud_fund_1_1,'.-',color='tab:blue',label='1')
+# ax4.plot(temperatura_1_2,magnitud_fund_1_2,'.-',color='tab:orange',label='2')
+# ax5.plot(temperatura_1_3,magnitud_fund_1_3,'.-',color='tab:green',label='3')
+
+# ax9.plot(temperatura_1_1,tau_1_1*1e9,'.-',color='tab:blue',label='1')
+# ax10.plot(temperatura_1_2,tau_1_2*1e9,'.-',color='tab:orange',label='2')
+# ax11.plot(temperatura_1_3,tau_1_3*1e9,'.-',color='tab:green',label='3')
+
+# ax6.plot(temperatura_1_1,SAR_1_1,'.-',color='tab:blue',label='1')
+# ax7.plot(temperatura_1_2,SAR_1_2,'.-',color='tab:orange',label='2')
+# ax8.plot(temperatura_1_3,SAR_1_3,'.-',color='tab:green',label='3')
+
+# ax0.set_ylabel('$\sin \Delta \phi$')
+# ax0.set_title('$\sin (\Delta \phi)$',loc='left')
+# ax3.set_ylabel('|c$_0$|')
+# ax3.set_title('Magnitud 1° armónico',loc='left')
+# ax6.set_title('SAR',loc='left')
+# ax6.set_ylabel('SAR (W/g)')
+# ax9.set_title('Tiempo de relajacion',loc='left')
+# ax9.set_ylabel(r'$\tau$ (ns)')
+# for a in [ax0,ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8,ax9,ax10,ax11]:
+#     a.set_xlim(-4,4)
+#     a.grid()
+#     a.legend()
+
+# for a in [ax6,ax7,ax8]:
+#     a.set_xlabel('T (°C)')
+
+# plt.suptitle(f'NE@citrico - {identif_1.split("_")[0]} kHz - {identif_1.split("_")[1]} kA/m',fontsize=16)
+# plt.savefig('sinphi_mag_SAR_tau_vs_T_'+identif_1+'.png',dpi=300)
+# plt.show()
+
+# #% 135 57
+# fig,((ax0,ax1,ax2),(ax3,ax4,ax5),(ax9,ax10,ax11),(ax6,ax7,ax8))= plt.subplots(ncols=3,nrows=4,figsize=(13,12),constrained_layout=True,sharex='col',sharey='row')
+# ax0.plot(temperatura_2_1,np.sin(dphi_fem_2_1),'.-',color='tab:blue',label='1')
+# ax1.plot(temperatura_2_2,np.sin(dphi_fem_2_2),'.-',color='tab:orange',label='2')
+# ax2.plot(temperatura_2_3,np.sin(dphi_fem_2_3),'.-',color='tab:green',label='3')
+
+# ax3.plot(temperatura_2_1,magnitud_fund_2_1,'.-',color='tab:blue',label='1')
+# ax4.plot(temperatura_2_2,magnitud_fund_2_2,'.-',color='tab:orange',label='2')
+# ax5.plot(temperatura_2_3,magnitud_fund_2_3,'.-',color='tab:green',label='3')
+
+# ax9.plot(temperatura_2_1,tau_2_1*1e9,'.-',color='tab:blue',label='1')
+# ax10.plot(temperatura_2_2,tau_2_2*1e9,'.-',color='tab:orange',label='2')
+# ax11.plot(temperatura_2_3,tau_2_3*1e9,'.-',color='tab:green',label='3')
+
+# ax6.plot(temperatura_2_1,SAR_2_1,'.-',color='tab:blue',label='1')
+# ax7.plot(temperatura_2_2,SAR_2_2,'.-',color='tab:orange',label='2')
+# ax8.plot(temperatura_2_3,SAR_2_3,'.-',color='tab:green',label='3')
+
+# ax0.set_ylabel('$\sin \Delta \phi$')
+# ax0.set_title('$\sin (\Delta \phi)$',loc='left')
+# ax3.set_ylabel('|c$_0$|')
+# ax3.set_title('Magnitud 1° armónico',loc='left')
+# ax6.set_title('SAR',loc='left')
+# ax6.set_ylabel('SAR (W/g)')
+# ax9.set_title('Tiempo de relajacion',loc='left')
+# ax9.set_ylabel(r'$\tau$ (ns)')
+# for a in [ax0,ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8,ax9,ax10,ax11]:
+#     a.set_xlim(-4,4)
+#     a.grid()
+#     a.legend()
+
+# for a in [ax6,ax7,ax8]:
+#     a.set_xlabel('T (°C)')
+
+# plt.suptitle(f'NE@citrico - {identif_2.split("_")[0]} kHz - {identif_2.split("_")[1]} kA/m',fontsize=16)
+# plt.savefig('sinphi_mag_SAR_tau_vs_T_'+identif_2+'.png',dpi=300)
+# plt.show()
+
+# #%265 38
+# fig,((ax0,ax1,ax2),(ax3,ax4,ax5),(ax9,ax10,ax11),(ax6,ax7,ax8))= plt.subplots(ncols=3,nrows=4,figsize=(13,12),constrained_layout=True,sharex='col',sharey='row')
+
+# ax0.plot(temperatura_3_1,np.sin(dphi_fem_3_1),'.-',color='tab:blue',label='1')
+# ax1.plot(temperatura_3_2,np.sin(dphi_fem_3_2),'.-',color='tab:orange',label='2')
+# ax2.plot(temperatura_3_3,np.sin(dphi_fem_3_3),'.-',color='tab:green',label='3')
+
+# ax3.plot(temperatura_3_1,magnitud_fund_3_1,'.-',color='tab:blue',label='1')
+# ax4.plot(temperatura_3_2,magnitud_fund_3_2,'.-',color='tab:orange',label='2')
+# ax5.plot(temperatura_3_3,magnitud_fund_3_3,'.-',color='tab:green',label='3')
+
+# ax9.plot(temperatura_3_1,tau_3_1*1e9,'.-',color='tab:blue',label='1')
+# ax10.plot(temperatura_3_2,tau_3_2*1e9,'.-',color='tab:orange',label='2')
+# ax11.plot(temperatura_3_3,tau_3_3*1e9,'.-',color='tab:green',label='3')
+
+# ax6.plot(temperatura_3_1,SAR_3_1,'.-',color='tab:blue',label='1')
+# ax7.plot(temperatura_3_2,SAR_3_2,'.-',color='tab:orange',label='2')
+# ax8.plot(temperatura_3_3,SAR_3_3,'.-',color='tab:green',label='3')
+
+# ax0.set_ylabel('$\sin \Delta \phi$')
+# ax0.set_title('$\sin (\Delta \phi)$',loc='left')
+# ax3.set_ylabel('|c$_0$|')
+# ax3.set_title('Magnitud 1° armónico',loc='left')
+# ax6.set_title('SAR',loc='left')
+# ax6.set_ylabel('SAR (W/g)')
+# ax9.set_title('Tiempo de relajacion',loc='left')
+# ax9.set_ylabel(r'$\tau$ (ns)')
+# for a in [ax0,ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8,ax9,ax10,ax11]:
+#     a.set_xlim(-4,4)
+#     a.grid()
+#     a.legend()
+
+# for a in [ax6,ax7,ax8]:
+#     a.set_xlabel('T (°C)')
+
+# plt.suptitle(f'NE@citrico - {identif_3.split("_")[0]} kHz - {identif_3.split("_")[1]} kA/m',fontsize=16)
+# plt.savefig('sinphi_mag_SAR_tau_vs_T_'+identif_3+'.png',dpi=300)
+# plt.show()
+# #% 265 57
+# fig,((ax0,ax1,ax2),(ax3,ax4,ax5),(ax9,ax10,ax11),(ax6,ax7,ax8))= plt.subplots(ncols=3,nrows=4,figsize=(13,12),constrained_layout=True,sharex='col',sharey='row')
+
+# ax0.plot(temperatura_4_1,np.sin(dphi_fem_4_1),'.-',color='tab:blue',label='1')
+# ax1.plot(temperatura_4_2,np.sin(dphi_fem_4_2),'.-',color='tab:orange',label='2')
+# ax2.plot(temperatura_4_3,np.sin(dphi_fem_4_3),'.-',color='tab:green',label='3')
+
+# ax3.plot(temperatura_4_1,magnitud_fund_4_1,'.-',color='tab:blue',label='1')
+# ax4.plot(temperatura_4_2,magnitud_fund_4_2,'.-',color='tab:orange',label='2')
+# ax5.plot(temperatura_4_3,magnitud_fund_4_3,'.-',color='tab:green',label='3')
+
+# ax9.plot(temperatura_4_1,tau_4_1*1e9,'.-',color='tab:blue',label='1')
+# ax10.plot(temperatura_4_2,tau_4_2*1e9,'.-',color='tab:orange',label='2')
+# ax11.plot(temperatura_4_3,tau_4_3*1e9,'.-',color='tab:green',label='3')
+
+# ax6.plot(temperatura_4_1,SAR_4_1,'.-',color='tab:blue',label='1')
+# ax7.plot(temperatura_4_2,SAR_4_2,'.-',color='tab:orange',label='2')
+# ax8.plot(temperatura_4_3,SAR_4_3,'.-',color='tab:green',label='3')
+
+# ax0.set_ylabel('$\sin \Delta \phi$')
+# ax0.set_title('$\sin (\Delta \phi)$',loc='left')
+# ax3.set_ylabel('|c$_0$|')
+# ax3.set_title('Magnitud 1° armónico',loc='left')
+# ax6.set_title('SAR',loc='left')
+# ax6.set_ylabel('SAR (W/g)')
+# ax9.set_title('Tiempo de relajacion',loc='left')
+# ax9.set_ylabel(r'$\tau$ (ns)')
+# for a in [ax0,ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8,ax9,ax10,ax11]:
+#     a.set_xlim(-4,4)
+#     a.grid()
+#     a.legend()
+
+# for a in [ax6,ax7,ax8]:
+#     a.set_xlabel('T (°C)')
+
+# plt.suptitle(f'NE@citrico - {identif_4.split("_")[0]} kHz - {identif_4.split("_")[1]} kA/m',fontsize=16)
+# plt.savefig('sinphi_mag_SAR_tau_vs_T_'+identif_4+'.png',dpi=300)
+# plt.show()
+
+# #% 265 20
+# fig,((ax0,ax1,ax2),(ax3,ax4,ax5),(ax9,ax10,ax11),(ax6,ax7,ax8))= plt.subplots(ncols=3,nrows=4,figsize=(13,12),constrained_layout=True,sharex='col',sharey='row')
+
+# ax0.plot(temperatura_5_1,np.sin(dphi_fem_5_1),'.-',color='tab:blue',label='1')
+# ax1.plot(temperatura_5_2,np.sin(dphi_fem_5_2),'.-',color='tab:orange',label='2')
+# ax2.plot(temperatura_5_3,np.sin(dphi_fem_5_3),'.-',color='tab:green',label='3')
+
+# ax3.plot(temperatura_5_1,magnitud_fund_5_1,'.-',color='tab:blue',label='1')
+# ax4.plot(temperatura_5_2,magnitud_fund_5_2,'.-',color='tab:orange',label='2')
+# ax5.plot(temperatura_5_3,magnitud_fund_5_3,'.-',color='tab:green',label='3')
+
+# ax9.plot(temperatura_5_1,tau_5_1*1e9,'.-',color='tab:blue',label='1')
+# ax10.plot(temperatura_5_2,tau_5_2*1e9,'.-',color='tab:orange',label='2')
+# ax11.plot(temperatura_5_3,tau_5_3*1e9,'.-',color='tab:green',label='3')
+
+# ax6.plot(temperatura_5_1,SAR_5_1,'.-',color='tab:blue',label='1')
+# ax7.plot(temperatura_5_2,SAR_5_2,'.-',color='tab:orange',label='2')
+# ax8.plot(temperatura_5_3,SAR_5_3,'.-',color='tab:green',label='3')
+
+# ax0.set_ylabel('$\sin \Delta \phi$')
+# ax0.set_title('$\sin (\Delta \phi)$',loc='left')
+# ax3.set_ylabel('|c$_0$|')
+# ax3.set_title('Magnitud 1° armónico',loc='left')
+# ax6.set_title('SAR',loc='left')
+# ax6.set_ylabel('SAR (W/g)')
+# ax9.set_title('Tiempo de relajacion',loc='left')
+# ax9.set_ylabel(r'$\tau$ (ns)')
+# for a in [ax0,ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8,ax9,ax10,ax11]:
+#     a.set_xlim(-4,4)
+#     a.grid()
+#     a.legend()
+
+# for a in [ax6,ax7,ax8]:
+#     a.set_xlabel('T (°C)')
+
+# plt.suptitle(f'NE@citrico - {identif_5.split("_")[0]} kHz - {identif_5.split("_")[1]} kA/m',fontsize=16)
+# plt.savefig('sinphi_mag_SAR_tau_vs_T_'+identif_5+'.png',dpi=300)
+# plt.show()
+
+# #%% Obtengo ciclos representativos
+# #primero los del pico en la transicion de fase
+# # print('max tau en TF:')
+# # indx_max_1= np.nonzero(tau_1_1==max(tau_1_1))[0][0]
+# # print(indx_max_1,files_1[indx_max_1],temperatura_1[indx_max_1])
+
+# # indx_max_2= np.nonzero(tau_1_2==max(tau_1_2))[0][0]
+# # print(indx_max_2,files_2[indx_max_2],temperatura_2[indx_max_2])
+
+# # indx_max_3= np.nonzero(tau_1_3==max(tau_1_3))[0][0]
+# # print(indx_max_3,files_3[indx_max_3],temperatura_3[indx_max_3])
+
+# #%% PLOT ALL TAUS
+# colors = [
+#     ['#00ace6','#0099cc','#0086b3'  ],  # tonos de azul
+#     ['#ff6600', '#e65c00', '#cc5200'],  # tonos de naranja
+#     ['#00cc44', '#00b33c', '#009933'],  # tonos de verde
+#     ['#ff0000', '#e60000', '#b30000'],  # tonos de rojo
+#     ['#ff00ff', '#cc00cc', '#990099'],  # tonos purpura
+#     ['#0059b3', '#004d99', '#004080'] # tonos azul oscuro
+# ]
+
+# fig,(ax1,ax2)=plt.subplots(2,1,figsize=(14,8),sharex=True,constrained_layout=True)
+# #Tau
+
+# ax1.plot(temperatura_0_1, tau_0_1 * 1e9, 'o-', zorder=-1,label=identif_0, color=colors[0][0])
+# ax1.plot(temperatura_0_2, tau_0_2 * 1e9, 'o-', zorder=0,label=identif_0, color=colors[0][1])
+# ax1.plot(temperatura_0_3, tau_0_3 * 1e9, 'o-', zorder=1,label=identif_0, color=colors[0][2])
+
+# ax1.plot(temperatura_1_1, tau_1_1 * 1e9, 's-', zorder=-1,label=identif_1, color=colors[1][0])
+# ax1.plot(temperatura_1_2, tau_1_2 * 1e9, 's-', zorder=0,label=identif_1, color=colors[1][1])
+# ax1.plot(temperatura_1_3, tau_1_3 * 1e9, 's-', zorder=1,label=identif_1, color=colors[1][2])
+
+# ax1.plot(temperatura_2_1, tau_2_1 * 1e9, 'p-', zorder=-1,label=identif_2, color=colors[2][0])
+# ax1.plot(temperatura_2_2, tau_2_2 * 1e9, 'p-', zorder=0,label=identif_2, color=colors[2][1])
+# ax1.plot(temperatura_2_3, tau_2_3 * 1e9, 'p-', zorder=1,label=identif_2, color=colors[2][2])
+
+# ax1.plot(temperatura_5_1, tau_5_1 * 1e9, 'v-', zorder=-1,label=identif_5, color=colors[3][0])
+# ax1.plot(temperatura_5_2, tau_5_2 * 1e9, 'v-', zorder=0,label=identif_5, color=colors[3][1])
+# ax1.plot(temperatura_5_3, tau_5_3 * 1e9, 'v-', zorder=1,label=identif_5, color=colors[3][2])
+
+# ax1.plot(temperatura_3_1, tau_3_1 * 1e9, '^-', zorder=-1,label=identif_3, color=colors[4][0])
+# ax1.plot(temperatura_3_2, tau_3_2 * 1e9, '^-', zorder=0,label=identif_3, color=colors[4][1])
+# ax1.plot(temperatura_3_3, tau_3_3 * 1e9, '^-', zorder=1,label=identif_3, color=colors[4][2])
+
+# ax1.plot(temperatura_4_1, tau_4_1 * 1e9, 'P-', zorder=-1,label=identif_4, color=colors[5][0])
+# ax1.plot(temperatura_4_2, tau_4_2 * 1e9, 'P-', zorder=0,label=identif_4, color=colors[5][1])
+# ax1.plot(temperatura_4_3, tau_4_3 * 1e9, 'P-', zorder=1,label=identif_4, color=colors[5][2])
+
+# #SAR
+
+# ax2.plot(temperatura_0_1, SAR_0_1, 'o-', zorder=1,label=identif_0, color=colors[0][0])
+# ax2.plot(temperatura_0_2, SAR_0_2, 'o-', zorder=2,label=identif_0, color=colors[0][1])
+# ax2.plot(temperatura_0_3, SAR_0_3, 'o-', zorder=3,label=identif_0, color=colors[0][2])
+
+# ax2.plot(temperatura_1_1, SAR_1_1, 's-', zorder=1,label=identif_1, color=colors[1][0])
+# ax2.plot(temperatura_1_2, SAR_1_2, 's-', zorder=2,label=identif_1, color=colors[1][1])
+# ax2.plot(temperatura_1_3, SAR_1_3, 's-', zorder=3,label=identif_1, color=colors[1][2])
+
+# ax2.plot(temperatura_2_1, SAR_2_1, 'v-', zorder=1,label=identif_2, color=colors[2][0])
+# ax2.plot(temperatura_2_2, SAR_2_2, 'v-', zorder=2,label=identif_2, color=colors[2][1])
+# ax2.plot(temperatura_2_3, SAR_2_3, 'v-', zorder=3,label=identif_2, color=colors[2][2])
+
+# ax2.plot(temperatura_5_1, SAR_5_1, 'p-', zorder=1,label=identif_5, color=colors[3][0])
+# ax2.plot(temperatura_5_2, SAR_5_2, 'p-', zorder=2,label=identif_5, color=colors[3][1])
+# ax2.plot(temperatura_5_3, SAR_5_3, 'p-', zorder=3,label=identif_5, color=colors[3][2])
+
+# ax2.plot(temperatura_3_1, SAR_3_1, '^-', zorder=1,label=identif_3, color=colors[4][0])
+# ax2.plot(temperatura_3_2, SAR_3_2, '^-', zorder=2,label=identif_3, color=colors[4][1])
+# ax2.plot(temperatura_3_3, SAR_3_3, '^-', zorder=3,label=identif_3, color=colors[4][2])
+
+# ax2.plot(temperatura_4_1, SAR_4_1, 'P-', zorder=1,label=identif_4, color=colors[5][0])
+# ax2.plot(temperatura_4_2, SAR_4_2, 'P-', zorder=2,label=identif_4, color=colors[5][1])
+# ax2.plot(temperatura_4_3, SAR_4_3, 'P-', zorder=3,label=identif_4, color=colors[5][2])
+
+# ax2.set_xticks(np.arange(-50,30,5))
+
+# # ax1.axhline(tau1.nominal_value,0,1,c='tab:red',label=f'{tau1} ns')
+# # ax1.axhspan(tau1.nominal_value-tau1.std_dev,tau1.nominal_value+tau1.std_dev,alpha=0.5,color='tab:red')
+# ax1.set_ylabel(r'$\tau$ (ns)')  
+# ax2.set_ylabel('SAR (W/g)')
+
+# ax1.set_title('Tiempo de relajación',loc='left')
+# ax2.set_title('SAR',loc='left')
+# ax2.set_xlabel('T (°C)')
+# plt.suptitle('NE@citrico 5X - congelado c/Campo Perpendicular',fontsize=15)
+# for ax in [ax1,ax2]:
+#     #ax.set_ylabel(r'$\tau$ (ns)')
+#     ax.legend(ncol=6)
+#     ax.grid(zorder=0)
+
+# plt.savefig('tau_SAR_vs_T__all_cong_c_campo_P.png',dpi=300)
 
 
 #%% AJUSTES TAU 
@@ -875,6 +914,36 @@ tau_4_1_cc=tau_4_1_cc*1e9
 tau_4_2_cc=tau_4_2_cc*1e9
 tau_4_3_cc=tau_4_3_cc*1e9
 
+time_4_1_cc = np.array([(f-time_4_1_cc[0]).total_seconds() for f in  time_4_1_cc])
+time_4_2_cc = np.array([(f-time_4_2_cc[0]).total_seconds() for f in  time_4_2_cc])
+time_4_3_cc = np.array([(f-time_4_3_cc[0]).total_seconds() for f in  time_4_3_cc])
+
+#%%
+
+dt_4_1_cc = np.gradient(temp_4_1_cc,time_4_1_cc)
+# time_4_2_cc = time_4_2_cc-time_4_2_cc[0]
+# dt_4_2_cc = np.gradient(temp_4_2_cc,time_4_2_cc)
+# time_4_3_cc = time_4_3_cc-time_4_3_cc[0]
+# dt_4_3_cc = np.gradient(temp_4_3_cc,time_4_3_cc)
+
+plt.figure(figsize=(10, 5))  # Tamaño del gráfico
+plt.plot(time_4_1_cc, temp_4_1_cc,'.-', label='Temperatura')  # Plotear datos
+# plt.plot(time_4_1_cc,dt_4_1_cc,'.-',label='dt')
+plt.plot(time_4_2_cc, temp_4_2_cc,'.-', label='Temperatura')  # Plotear datos
+# plt.plot(time_4_1_cc,dt_4_1_cc,'.-',label='dt')
+plt.plot(time_4_3_cc, temp_4_3_cc,'.-', label='Temperatura')  # Plotear datos
+# plt.plot(time_4_1_cc,dt_4_1_cc,'.-',label='dt')
+
+
+plt.xlabel('Tiempo')  # Etiqueta del eje x
+plt.ylabel('Temperatura (°C)')  # Etiqueta del eje y
+plt.title('Temperatura vs Tiempo')  # Título del gráfico
+plt.legend()  # Leyenda del gráfico
+plt.grid(True)  # Añadir una cuadrícula
+plt.xticks(rotation=45)  # Rotar etiquetas del eje x para mejor legibilidad
+
+
+#%%
 temp_all_sc = np.concatenate((temp_4_1_sc, temp_4_2_sc, temp_4_3_sc))
 tau_all_sc = np.concatenate((tau_4_1_sc, tau_4_2_sc, tau_4_3_sc))
 
@@ -1164,7 +1233,7 @@ plt.title(identif_4_sc +' - '+identif_4_cc)
 plt.savefig('tau_vs_T_comparativa_'+identif_4_sc+' '+identif_4_cc + '.png',dpi=300)
 plt.show()
 
-#%%
+#%
 lim_ajuste_i= -6
 lim_ajuste_tf = -4.0
 lim_ajuste_f= 0
@@ -1274,7 +1343,7 @@ y_cc_tf=lineal(x_cc_tf,slope_tf_cc,intercept_tf_cc)
 x_cc_f=np.linspace(lim_ajuste_f,25,1000)
 y_cc_f=lineal(x_cc_f,slope_f_cc,intercept_f_cc)
 
-#%%
+#%
 fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
 ax.plot(x_all_i_sc, y_all_i_sc, 'o',label=f'i: [{min(x_all_i_sc)} ; {lim_ajuste_i}]°C')
 ax.plot(x_sc_i,y_sc_i,label=f'{a_i_sc:.1uf} ns/°C')
@@ -1366,7 +1435,6 @@ y_aux_f=lineal(x_aux_f,slope_f_cc,intercept_f_cc)
 # #plt.savefig('tau_vs_T_'+identif_4+'.png',dpi=300)
 # plt.show()
 
-# %%
 #%% 135 kHz 20 kA/m   CC vs SC
 identif_4_sc='135_20_CsC'
 dir_4_sc = os.path.join(os.getcwd(),identif_4_sc)
@@ -1423,7 +1491,6 @@ plt.xlim(-10,10)
 plt.savefig('tau_vs_T_comparativa_'+identif_4_sc+' '+identif_4_cc + '_zoom.png',dpi=300)
 plt.show()
 
-#%%
 lim_ajuste_i= -6
 lim_ajuste_tf = -4.0
 lim_ajuste_f= 0
@@ -1533,7 +1600,7 @@ y_cc_tf=lineal(x_cc_tf,slope_tf_cc,intercept_tf_cc)
 x_cc_f=np.linspace(lim_ajuste_f,25,1000)
 y_cc_f=lineal(x_cc_f,slope_f_cc,intercept_f_cc)
 
-#%%
+#%
 fig,ax= plt.subplots(figsize=(9,5),constrained_layout=True)
 ax.plot(x_all_i_sc, y_all_i_sc, 'o',label=f'i: [{min(x_all_i_sc)} ; {lim_ajuste_i}]°C')
 ax.plot(x_sc_i,y_sc_i,label=f'{a_i_sc:.1uf} ns/°C')
@@ -1625,4 +1692,42 @@ y_aux_f=lineal(x_aux_f,slope_f_cc,intercept_f_cc)
 # #plt.savefig('tau_vs_T_'+identif_4+'.png',dpi=300)
 # plt.show()
 
-# %%
+#%% Laburo con templogs de 265 57 CC
+timestamp,temperatura_cc,T_amb_cc =lector_templog(dir_4_cc,plot=True)
+
+
+
+#%% fecha_m_aux=[datetime.fromtimestamp(os.path.getmtime(path)) for path in path_m]
+# delta_t_m = [(int(( t - fecha_m_aux[0]).total_seconds())) for t in fecha_m_aux] #dif en s para los archivos de muestra
+
+# # Calcula las hs de diferencia entre los archivos de muestra y el timestamp
+# diferencia_horaria = (fecha_m_aux[0]-timestamp[0]).total_seconds()//3600
+# print(f'{diferencia_horaria} hs de diferencia entre archivos y timestamp')
+# date_primer_dato = fecha_m_aux[0]-timedelta(hours=diferencia_horaria)
+# time_m = [(date_primer_dato + timedelta(0,dt)) for dt in delta_t_m]
+# temp_m= np.array([temperatura[np.flatnonzero(timestamp==t)[0]] for t in time_m])
+# #temp_fondo= T_amb[np.flatnonzero(timestamp==time_m[-1])][0]
+
+cmap = mpl.colormaps['jet']  #'viridis' # Crear un rango de colores basado en las temperaturas y el cmap
+norm = plt.Normalize(temp_m.min(), temp_m.max())
+
+fig2,ax=plt.subplots(figsize=(8,5.5),constrained_layout=True)
+ax.plot(np.arange(len(temperatura)),temperatura,'k-',lw=1,zorder=3)
+delta_0 = (time_m[0] - timestamp[0]).total_seconds()
+
+ax.scatter(delta_t_m[0]+delta_0,temp_m[0],c='k')
+for i in range(0,len(temp_m)-1):
+    color = cmap(norm(temp_m[i]))
+    ax.scatter(delta_t_m[i]+delta_0,temp_m[i],color=color,label=fnames_m[i].split("_")[-1].split(".")[0])
+ax.scatter(delta_0+delta_t_m[-1],temp_m[-1],marker='x',c='k',label='fondo')
+#plt.plot(np.arange(len(T_amb)),T_amb, label= 'RT')
+#plt.legend(ncol=4)
+# plt.legend(loc='center',bbox_to_anchor=(0.5,-0.25),ncol=6,fancybox=True)
+plt.xlim(0,len(T_amb))
+plt.grid()
+plt.xlabel('$\Delta t$ (s) ')
+plt.ylabel('Temperatura (°C) ')
+plt.title('Temperatura de archivos de muestra',fontsize=20)
+plt.text(0.75,0.15,f'{frec_nombre[0]/1000:.0f} kHz',fontsize=15,bbox=dict(color='tab:orange',alpha=0.7),transform=ax.transAxes)
+plt.savefig(os.path.join(output_dir,os.path.commonprefix(fnames_m)+'_templog.png'),dpi=200,facecolor='w')
+
